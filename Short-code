@@ -1,0 +1,405 @@
+<?php 
+
+function donate_button_shortcode( $atts, $content = null  ) {
+
+	extract( shortcode_atts( array(
+		'text' => 'Donate Today',
+		'link' => '',
+	), $atts ) );
+
+	return '<a class="donate_button_sidebar" href="'.$link.'">'.$text.'</a>';
+}	
+add_shortcode('donate_button', 'donate_button_shortcode');
+
+function weaccecpt_shortcode( $atts, $content = null  ) {
+	extract( shortcode_atts( array(
+		'text' => '',
+	), $atts ) );
+	return '<span class="we_accpt_button">'.$text.'</span>';
+}	
+add_shortcode('weaccecpt', 'weaccecpt_shortcode');
+
+function image_shortcode( $atts, $content = null  ) {
+	extract( shortcode_atts( array(
+		'src' => '',
+	), $atts ) );
+	return '<img src="'.$src.'" alt="" />';
+}	
+add_shortcode('img', 'image_shortcode');
+
+function donate_step_shortcode( $atts, $content = null  ) {
+	extract( shortcode_atts( array(
+		'img' => '',
+		'text' => '',
+	), $atts ) );
+	return '<div class="donate_items">
+		<img src="'.$img.'" alt="" />
+		<p>'.$text.'</p>
+	</div>';
+}	
+add_shortcode('donate_step', 'donate_step_shortcode');
+
+function table_wrapper_shortcode( $atts, $content = null  ) {
+	return '<div class="table_wrapper">'.do_shortcode($content).'<div class="table_fix"></div></div>';
+}	
+add_shortcode('table_wrapper', 'table_wrapper_shortcode');
+
+function space_shortcode( $atts, $content = null  ) {
+	return '<div style="height:20px;width:100%;display:block"></div>';
+}	
+add_shortcode('space', 'space_shortcode');
+
+function address_shortcode( $atts, $content = null  ) {
+	return '<div class="address_formattting">'.do_shortcode($content).'</div>';
+}	
+add_shortcode('address', 'address_shortcode');
+
+function thumb_shortcode( $atts, $content = null  ) {
+	return '<div class="about_thumbs">'.do_shortcode($content).'</div>';
+}	
+add_shortcode('thumb', 'thumb_shortcode');
+
+
+
+function thumb_items_shortcode( $atts, $content = null  ) {
+
+	extract( shortcode_atts( array(
+		'img' => '',
+		'caption' => '',
+	), $atts ) );
+
+	return '<div class="single_thumbs"><img src="'.$img.'" alt="" /> <p>'.$caption.'</p></div>';
+}	
+add_shortcode('items', 'thumb_items_shortcode');
+
+
+function wishlist_shortcode($atts){
+	extract( shortcode_atts( array(
+		'expand' => '',
+	), $atts, 'wishlist' ) );
+	
+    $q = new WP_Query(
+        array('posts_per_page' => '4', 'post_type' => 'wishlist-items', 'meta_key' => 'order_number','orderby' => 'meta_value','order' => 'ASC')
+        );		
+		
+	$list = '<div class="wishlist_item_list">';
+	while($q->have_posts()) : $q->the_post();
+		$idd = get_the_ID();
+		$wishlist_email = get_post_meta($idd, 'wishlist_email', true); 
+		$order_number = get_post_meta($idd, 'order_number', true);
+		$list .= '
+		<div class="single_wishlist">
+			<div class="wishlist_top">
+				<p>' .do_shortcode( get_the_title() ). ' <a href="mailto:'.$wishlist_email.'">'.$wishlist_email.'</a></p>
+			</div>
+			
+			<div class="wishlist_bottom">
+				' .do_shortcode( get_the_content() ). '
+			</div>
+		</div>
+		';        
+	endwhile;
+	$list.= '</div>';
+	wp_reset_query();
+	return $list;
+}
+add_shortcode('wishlist', 'wishlist_shortcode');	
+
+
+function board_member_shortcode($atts){
+	extract( shortcode_atts( array(
+		'expand' => '',
+	), $atts, 'board' ) );
+	
+    $q = new WP_Query(
+        array('posts_per_page' => '-1', 'post_type' => 'board-items', 'meta_key' => 'order_number','orderby' => 'meta_value','order' => 'ASC')
+        );		
+		
+		
+	$list = '<div class="board_member_list">';
+	while($q->have_posts()) : $q->the_post();
+		$idd = get_the_ID();
+		$board_thumb = get_post_meta($idd, 'board_thumb', true); 
+		$board_position = get_post_meta($idd, 'board_position', true); 
+		$order_number = get_post_meta($idd, 'order_number', true);
+		$list .= '
+		<div class="single_board_member">
+			<div class="board_thumb floatleft">
+				<img src="'.$board_thumb.'" alt="" />
+			</div>
+			<div class="board_name floatleft">
+				<h2>' .do_shortcode( get_the_title() ). '</h2>
+			</div>
+			<div class="board_position floatleft">
+				<p>'.$board_position.'</p>
+			</div>
+		</div>
+		';        
+	endwhile;
+	$list.= '</div>';
+	wp_reset_query();
+	return $list;
+}
+add_shortcode('board', 'board_member_shortcode');	
+
+
+function staff_shortcode($atts){
+	extract( shortcode_atts( array(
+		'category' => '',
+		'title' => '',
+	), $atts, 'staff' ) );
+	
+    $q = new WP_Query(
+        array('staff_cat' => $category, 'posts_per_page' => '-1', 'post_type' => 'staff-items', 'meta_key' => 'order_number','orderby' => 'meta_value','order' => 'ASC')
+        );		
+		
+		
+	$list = '<h2>'.$title.'</h2><div class="staff_member_list">';
+	while($q->have_posts()) : $q->the_post();
+		$idd = get_the_ID();
+		$staff_thumb = get_post_meta($idd, 'staff_thumb', true); 
+		$staff_subtitle = get_post_meta($idd, 'staff_subtitle', true); 
+		$staff_phone = get_post_meta($idd, 'staff_phone', true);
+		$staff_direct_dial = get_post_meta($idd, 'staff_direct_dial', true);
+		$staff_email = get_post_meta($idd, 'staff_email', true);
+		$staff_detail = get_post_meta($idd, 'staff_detail', true);
+		$order_number = get_post_meta($idd, 'order_number', true);
+		$list .= '
+		<script type="text/javascript">
+			jQuery(document).ready(function ($) {
+			  $("#about_new_button'.$idd.'").hover(function(){
+				$("#about_button'.$idd.'").show();
+				},function(){
+				$("#about_button'.$idd.'").hide();
+			  });			
+			});			
+		</script>
+		<div class="single_staff_member">
+			<div class="staff_thumb floatleft">
+				<img src="'.$staff_thumb.'" alt="" />
+			</div>
+			<div class="staff_content floatleft">
+				<div class="staff_top_content">
+					<div class="staff_title_area">
+						<h3>' .do_shortcode( get_the_title() ). '</h3>
+						<div class="about_content">
+							<span id="about_new_button'.$idd.'" class="about_new_button">About</span>
+							
+							<div id="about_button'.$idd.'" class="about_button">
+								
+								<div class="about_staff_content">
+									<h2>' .do_shortcode( get_the_title() ). '</h2>
+									<p>'.$staff_detail.'</p>	
+								</div>
+							</div>							
+						</div>
+					</div>
+					
+					<p class="sub_title">'.$staff_subtitle.'</p>	
+
+				</div>
+
+				<div class="bottom_staff_info">
+					<div class="left_staff_info floatleft">
+						<p><strong>Phone:<br/>'.$staff_phone.'</strong></p>
+						<p><strong>Direct Dial:<br/>'.$staff_direct_dial.'</strong></p>
+					</div>
+					<div class="right_staff_info floatright">
+						<p><strong>Email:<br/><a href="mailto:'.$staff_email.'">'.$staff_email.'</a></strong></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		';        
+	endwhile;
+	$list.= '</div>';
+	wp_reset_query();
+	return $list;
+}
+add_shortcode('staff', 'staff_shortcode');	
+
+
+
+function team_shortcode($atts){
+	extract( shortcode_atts( array(
+		'category' => '',
+		'title' => '',
+	), $atts, 'team' ) );
+	
+    $q = new WP_Query(
+        array('staff_cat' => $category, 'posts_per_page' => '-1', 'post_type' => 'staff-items', 'meta_key' => 'order_number','orderby' => 'meta_value','order' => 'ASC')
+        );		
+		
+		
+	$list = '<div style="clear:both"></div><div class="team_member_list"><h3>'.$title.'</h3>';
+	while($q->have_posts()) : $q->the_post();
+		$idd = get_the_ID();
+		$staff_thumb = get_post_meta($idd, 'staff_thumb', true); 
+		$staff_subtitle = get_post_meta($idd, 'staff_subtitle', true); 
+		$staff_phone = get_post_meta($idd, 'staff_phone', true);
+		$staff_direct_dial = get_post_meta($idd, 'staff_direct_dial', true);
+		$staff_email = get_post_meta($idd, 'staff_email', true);
+		$order_number = get_post_meta($idd, 'order_number', true);
+		$list .= '
+		<div class="single_team_member">
+			<div class="team_thumbnail">
+				<img src="'.$staff_thumb.'" alt="" />
+			</div>
+			
+			<div class="team_name_and_subtitle">
+				<h2>' .do_shortcode( get_the_title() ). '</h2>
+				<p>'.$staff_subtitle.'</p>
+			</div>
+			
+			<div class="team_phone_number">
+				<p><strong>Phone:</strong>'.$staff_phone.'</p>
+				<p><strong>Direct Dial:</strong>'.$staff_direct_dial.'</p>
+			</div>
+			
+			<div class="team_email_address">
+				<p><strong>Email:</strong><br/> <a href="mailto:'.$staff_email.'">'.$staff_email.'</a></p>
+			</div>
+		</div>
+		';        
+	endwhile;
+	$list.= '</div>';
+	wp_reset_query();
+	return $list;
+}
+add_shortcode('team', 'team_shortcode');	
+
+function programs_shortcode($atts){
+	extract( shortcode_atts( array(
+		'category' => '',
+		'title' => '',
+	), $atts, 'programs' ) );
+	
+    $q = new WP_Query(
+        array('program_cat' => $category, 'posts_per_page' => '-1', 'post_type' => 'program-items', 'meta_key' => 'order_number','orderby' => 'meta_value','order' => 'ASC')
+        );		
+		
+		
+	$list = '<div style="clear:both"></div><div class="all_programs_list"><h2 class="program_title_headidng">'.$title.'</h2>';
+	while($q->have_posts()) : $q->the_post();
+		$idd = get_the_ID();
+		$program_thumb = get_post_meta($idd, 'program_thumb', true); 
+		$order_number = get_post_meta($idd, 'order_number', true);
+		$list .= '
+		<div class="single_program">
+			<h3>' .do_shortcode( get_the_title() ). '</h3>
+			<img src="'.$program_thumb.'" alt="" />
+			<p>' .do_shortcode( get_the_content() ). '</p>
+		</div>
+		';        
+	endwhile;
+	$list.= '</div>';
+	wp_reset_query();
+	return $list;
+}
+add_shortcode('programs', 'programs_shortcode');	
+
+
+
+function resources_shortcode($atts){
+	extract( shortcode_atts( array(
+		'category' => '',
+		'title' => '',
+	), $atts, 'programs' ) );
+	
+    $q = new WP_Query(
+        array('resource_cat' => $category, 'posts_per_page' => '-1', 'post_type' => 'resource-items', 'meta_key' => 'order_number','orderby' => 'meta_value','order' => 'ASC')
+        );		
+		
+		
+	$list = '<div style="clear:both"></div><div class="all_resource_list"><h2 class="resource_title_headidng">'.$title.'</h2>';
+	while($q->have_posts()) : $q->the_post();
+		$idd = get_the_ID();
+		$resource_thumb = get_post_meta($idd, 'resource_thumb', true); 
+		$resource_website = get_post_meta($idd, 'resource_website', true); 
+		$resource_address = get_post_meta($idd, 'resource_address', true); 			
+		$resource_address_two = get_post_meta($idd, 'resource_address_two', true); 
+		$resource_phone = get_post_meta($idd, 'resource_phone', true); 			
+		$resource_tty = get_post_meta($idd, 'resource_tty', true); 			
+		$show_secondary_info = get_post_meta($idd, 'show_secondary_info', true); 	
+		$show_toll_free = get_post_meta($idd, 'show_toll_free', true); 			
+		$show_fax_number = get_post_meta($idd, 'show_fax_number', true); 	
+		$show_tty_number = get_post_meta($idd, 'show_tty_number', true); 	
+		$long_image = get_post_meta($idd, 'long_image', true); 			
+		$resource_toll_free = get_post_meta($idd, 'resource_toll_free', true); 		
+		$resource_phone_two = get_post_meta($idd, 'resource_phone_two', true); 
+		$resource_fax = get_post_meta($idd, 'resource_fax', true); 		
+		$show_fax_number_two = get_post_meta($idd, 'show_fax_number_two', true); 
+		$resource_fax_two = get_post_meta($idd, 'resource_fax_two', true); 
+		$show_phone_number_two = get_post_meta($idd, 'show_phone_number_two', true);	
+		$order_number = get_post_meta($idd, 'order_number', true);
+		$list .= '
+		<div class="single_resource '.$long_image.'">
+			<div class="resource_top_content">
+				<div class="left_company_photo">
+					<img src="'.$resource_thumb.'" alt="" />
+				</div>
+				<div class="right_company_title">
+					<h3>' .do_shortcode( get_the_title() ). '</h3>
+					<a href="'.$resource_website.'">Website</a>
+				</div>
+			</div>
+			<div class="resource_bottom_content">
+				<div class="resource_bottom_left">
+					<p>'.$resource_address.'</p>
+				</div>
+				
+				<div class="resource_bottom_right">
+					<p><strong>Phone:</strong> '.$resource_phone.'</p>	
+					<p style="display:'.$show_toll_free.'"><strong>Toll free:</strong> '.$resource_toll_free.'</p>
+					<p style="display:'.$show_fax_number.'"><strong>Fax:</strong> '.$resource_fax.'</p>										<p style="display:'.$show_tty_number.'"><strong>TTY:</strong> '.$resource_tty.'</p>
+				</div>
+			</div>					
+			<div style="display:'.$show_secondary_info.'" class="resource_bottom_content">		
+				<div class="resource_bottom_left">		
+				<p>'.$resource_address_two.'</p>			
+				</div>	
+				<div style="display:'.$show_phone_number_two.'" class="resource_bottom_right">	
+				<p><strong>Phone:</strong> '.$resource_phone_two.'</p>	
+				<p style="display:'.$show_fax_number_two.'"><strong>Fax:</strong> '.$resource_fax_two.'</p>			
+				</div>	
+			</div>			
+		</div>
+		';        
+	endwhile;
+	$list.= '</div>';
+	wp_reset_query();
+	return $list;
+}
+add_shortcode('resources', 'resources_shortcode');	
+
+
+function list_items_wrapper( $atts, $content = null  ) {
+	return '<div class="list_item_content">'.do_shortcode($content).'</div>';
+}	
+add_shortcode('list_items', 'list_items_wrapper');
+
+
+function headding_dynamic_shortcode( $atts, $content = null  ) {
+	extract( shortcode_atts( array(
+		'color' => '',
+	), $atts ) );
+	return '<h2 style="color:'.$color.'">'.do_shortcode($content).'</h2>';
+}	
+add_shortcode('h2', 'headding_dynamic_shortcode');
+
+
+function single_list_shortcode( $atts, $content = null  ) {
+
+	extract( shortcode_atts( array(
+		'title' => '',
+		'detail' => '',
+	), $atts ) );
+
+	return '<div class="single_lists">
+				<p><strong>'.$title.'</strong></p>
+				<p class="detail_lists">'.$detail.'</p>
+			</div>';
+}	
+add_shortcode('single_list', 'single_list_shortcode');
+
+?>
