@@ -1,0 +1,293 @@
+<?php if ( ! defined( 'ABSPATH' ) ) die( 'Direct access forbidden.' );
+/**
+ * Visual Composer Shortcode of BLOCK-6- LEFT THUMB
+ */
+
+if ( ! function_exists( 'my_news_getcat' ) ) {
+    function my_news_getcat(){
+        $categories_obj = get_categories();
+        $cats = array();
+        $cats['All'] = '0';
+        foreach ($categories_obj as $cat) {
+            $cats[$cat->cat_name] = $cat->term_id;
+        }
+        return $cats;
+    }
+}
+
+if ( ! function_exists( 'my_news_get_category_id_from_slug' ) ) {
+    function my_news_get_category_id_from_slug($cat_ids) {
+        foreach( $cat_ids as $cat ) :
+            $my_news_term = get_category_by_slug($cat);
+            $getcatid[] = esc_attr($my_news_term->term_id);
+            $getcatids = implode(",", array_filter($getcatid));
+            $getcatids1 = rtrim($getcatids,',');
+        endforeach;
+        return $getcatids1;
+    }
+}
+
+
+if ( function_exists( 'vc_map' ) ) {
+    class WPBakeryShortCode_tn_post_default extends WPBakeryShortCode {
+
+        protected function content($atts, $content = null) {
+            extract(shortcode_atts(array(
+                'title' 		=> '',
+                'post_col' 		=> '',
+                'cat_id' 		=> '',
+                'categorie_slug'    => '',
+                'tag'               => '',
+                'orderby' 		=> '',
+                'order' 		=> '',
+                'meta' 		=> '',
+                'limit'             => 4,
+                'show_excrpt' 	=> '',
+                'excerpt' 		=> 20,
+                'el_class' 		=> '',
+            ), $atts));
+
+            ob_start();
+            my_news_post_default($title,$post_col,$cat_id,$categorie_slug,$tag,$orderby,$order,$meta,$limit,$show_excrpt,$excerpt,$el_class);
+            return ob_get_clean();
+
+
+        }
+    }
+
+    $cats[]	=	my_news_getcat();
+    vc_map( array(
+        "base"                  => "tn_post_default",
+        "name"                  => esc_html__("Post (default)", 'text-domain'),
+        "class"                 => "",
+        "category"              => esc_html__('TopNews', 'text-domain'),
+        "icon"                  => get_template_directory_uri().'/images/admin/post-default.jpg',
+        "params" => array(
+            array(
+                "type"          => "textfield",
+                "heading"       => esc_html__("Title for this block:", 'text-domain'),
+                "param_name"    => "title",
+                "description"   => esc_html__("Enter text which will be used as this block title. Leave blank if no title is needed.", 'text-domain'),
+            ),
+            array(
+                "type"          => "dropdown",
+                "heading"       => esc_html__( "Column:", 'text-domain' ),
+                "param_name"    => "post_col",
+                "description"   => esc_html__("Select post column number", 'text-domain'),
+                "value"         => array(
+                    esc_html__( "Select Column",'text-domain')	=> "",
+                    esc_html__( "2 Column",'text-domain')	=> "2-column",
+                    esc_html__( "3 Column", 'text-domain' )	=> "3-column",
+                    esc_html__( "4 Column", 'text-domain' )	=> "4-column",
+                ),
+            ),
+            array(
+                "type"          => "dropdown",
+                "heading"       => esc_html__("Select category:", 'text-domain'),
+                "param_name"    => "cat_id",
+                "value"         => my_news_getcat(),
+                "description"   => esc_html__("Select Category to display", 'text-domain')
+            ),
+            array(
+                "type" => "textfield",
+                "heading"       => esc_html__("Multiple categories filter:", "top-news"),
+                "param_name"    => "categorie_slug",
+                "description"   => esc_html__("Filter multiple categories by category slug separated by commas Eg: fashion-news,tech-land,sport-news. Leave empty if you want to select category from dropdown list above", "top-news"),
+            ),
+            array(
+                "type" => "textfield",
+                "heading"       => esc_html__("Filter by tag slug:", "top-news"),
+                "param_name"    => "tag",
+                "description"   => esc_html__("To filter multiple tag slugs, enter here the tag slugs separated by commas (ex: tag1,tag2,tag3). Leave empty if you want to display post from Category or Category slug", "top-news"),
+            ),
+
+            array(
+                "type"          => "dropdown",
+                "heading"       => esc_html__( "Order By:", 'text-domain' ),
+                "param_name"    => "orderby",
+                "description"   => esc_html__( 'Select how to sort retrieved posts. More at %s.', 'text-domain' ),
+                "value"		=> array(
+                    esc_html__( "Select order by",'text-domain')	=> "DESC",
+                    esc_html__( "Date", 'text-domain' )		=> "date",
+                    esc_html__( "Name", 'text-domain' )		=> "name",
+                    esc_html__( "Modified", 'text-domain' )	=> "modified",
+                    esc_html__( "Author", 'text-domain' )	=> "author",
+                    esc_html__( "Random", 'text-domain' )	=> "rand",
+                    esc_html__( "Comment Count", 'text-domain' )=> "comment_count",
+                ),
+            ),
+            array(
+                "type"          => "dropdown",
+                "heading"       => esc_html__( "Order:", 'text-domain' ),
+                "param_name"    => "order",
+                "description"   => esc_html__( 'Designates the ascending or descending order.', 'text-domain' ),
+                "value"         => array(
+                    esc_html__( "Select order",'text-domain')	=> "DESC",
+                    esc_html__( "DESC",'text-domain')	=> "DESC",
+                    esc_html__( "ASC", 'text-domain' )	=> "ASC",
+                ),
+            ),
+            array(
+                'param_name' => 'meta',
+                'type' => 'checkbox',
+                'heading' => esc_html__('Display meta description', 'text-domain'),
+                "description"       => esc_html__("Don't forgot to check 'Yes' if you want to display meta description of post on list", 'text-domain')
+            ),
+            array(
+                "type"          => "textfield",
+                "heading"       => esc_html__("Limit (numeric value only)", 'text-domain'),
+                "param_name"    => "limit",
+                "description"   => esc_html__("Limit of total post Eg: 5, Default value is 5", 'text-domain'),
+                "default"       =>'4'
+            ),
+            array(
+                'param_name'    => 'show_excrpt',
+                'type'          => 'checkbox',
+                'heading'       => esc_html__('Display post excerpt', 'text-domain'),
+                "description"   => esc_html__("Don't forgot to check 'Yes' if you want to display meta description of post on list", 'text-domain')
+            ),
+            array(
+                "type"          => "textfield",
+                "heading"       => esc_html__("Excerpt word limit (numeric value only):", 'text-domain'),
+                "param_name"    => "excerpt",
+                "description"   => esc_html__("Word limit post excerpt Eg: 20, Default value is 20", 'text-domain'),
+            ),
+            array(
+                "type"              => "textfield",
+                "heading"           => esc_html__("Extra class name:", 'text-domain'),
+                "param_name"        => "el_class",
+                "description"       => esc_html__("If you wish to style particular content element differently, then use this field to add a class name and then refer to it in your css file.", 'text-domain')
+            )
+        )
+    ) );
+}
+
+function my_news_post_default($title,$post_col,$cat_id,$categorie_slug,$tag,$orderby,$order,$meta,$limit,$show_excrpt,$excerpt,$el_class) {
+    $unqID = uniqid();
+    $meta_description = (($meta === 'true') ? 'yes' : null);
+    $excerpt_display = (($show_excrpt === 'true') ? 'yes' : null);
+    if ($post_col =='2-column') {
+        $col_md = "col-md-6";
+        $perrow = 2;
+    } else if ($post_col =='3-column'){
+        $col_md = "col-md-4";
+        $perrow = 3;
+    } else if ($post_col =='4-column'){
+        $col_md = "col-md-3";
+        $perrow = 3;
+    } else {
+        $col_md = "col-md-6";
+        $perrow = 2;
+    }
+    ?>
+    <div id="post-widget-<?php echo esc_attr($unqID);?>" class="posts-widget posts-default posts-lists block <?php echo esc_attr($el_class); ?>">
+        <?php if(! empty($title)) : ?>
+            <h2 class="widget-title"><span><?php echo esc_html($title); ?></span></h2>
+            <div class="clearfix"></div>
+        <?php endif; ?>
+        <?php
+        if($tag != ''){
+            $query_args = array(
+                'post_type'         => 'post',
+                'posts_per_page'    => $limit,
+                'order'             => $order,
+                'orderby'           => $orderby,
+                'tag'               => $tag,
+            );
+        } else if($categorie_slug != '' && $tag == ''){
+            $query_args = array(
+                'post_type'		=> 'post',
+                'post_status'       => 'publish',
+                'posts_per_page'	=> $limit,
+                'order'             => $order,
+                'orderby'		=> $orderby,
+                'category_name' 	=> $categorie_slug,
+            );
+        } else if( $cat_id == true && !empty($cat_id[0]) && $categorie_slug == '') {
+            $query_args = array(
+                'post_type'         => 'post',
+                'post_status'       => 'publish',
+                'tax_query' => array(
+                    array(
+                        'taxonomy' => 'category',
+                        'field'    => 'term_id',
+                        'terms'    => $cat_id,
+                    ),
+                ),
+                'posts_per_page'    =>  $limit,
+                'order'             => $order,
+                'orderby'		=> $orderby,
+                'ignore_sticky_posts' => true,
+            );
+        } else {
+            $query_args = array(
+                'post_type' => 'post',
+                'post_status'         => 'publish',
+                'posts_per_page'      =>  $limit,
+                'order'		=> $order,
+                'orderby'		=> $orderby,
+                'ignore_sticky_posts' => true,
+            );
+        }
+        $the_query = new WP_Query( $query_args );
+        $counter=0;
+        if ( $the_query->have_posts() ) :?>
+            <div class="row">
+            <?php while ( $the_query->have_posts() ) : $the_query->the_post(); $counter++;
+                $meta_data = get_post_meta( get_the_ID(), '_format-video', true );
+                ?>
+
+                <div class="<?php echo esc_attr($col_md); ?>">
+                    <article class="post-item">
+                        <?php if ( has_post_thumbnail() ) : ?>
+                            <div class="post-thumb">
+                                <a href="<?php the_permalink();?>">
+                                    <?php the_post_thumbnail('top-news-thumbnail-x2'); ?>
+                                </a>
+                                <?php if( !empty($meta_data['embedded_link'])) : ?>
+                                    <a href="<?php the_permalink(); ?>" class="play-btn"></a>
+                                <?php endif; ?>
+                                <div class="cat-tag-list"></div>
+                            </div> <!--.thumbnail -->
+                        <?php endif; ?>
+
+                        <div class="content">
+                            <h2 class="title">
+                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                            </h2>
+                            <?php if ($meta_description === 'yes') : ?>
+                                <div class="meta">
+                                    <span><?php esc_html_e('Posted by', 'text-domain'); ?></span>
+                                    <?php the_author_posts_link(); ?>
+                                    <span>-</span>
+                                    <span><?php echo get_the_date(); ?></span>
+                                </div> <!--/.meta-->
+                            <?php endif; ?>
+                            <?php if ($excerpt_display === 'yes') : ?>
+                                <div class="excerpt">
+                                    <p>
+                                        <?php
+                                        $trimexcerpt = get_the_excerpt();
+                                        $shortexcerpt = wp_trim_words( $trimexcerpt, $num_words = $excerpt, $more = ' &#8230;' );
+                                        echo $shortexcerpt;
+                                        ?>
+                                    </p>
+                                </div> <!--/.excerpt-->
+                                <a href="<?php the_permalink(); ?>" class="btn btn-default readmore"><?php esc_html_e('Read More', 'text-domain'); ?></a>
+                            <?php endif; ?>
+                        </div><!-- /.content -->
+                    </article><!-- /.post-item -->
+                </div>
+                <?php
+                //close row div and start another every 2 posts
+                if ($counter%$perrow == 0):?>
+                    </div><div class="row">
+                <?php endif; endwhile;
+            wp_reset_postdata();?>
+            </div>
+        <?php else : ?>
+            <p><?php esc_html__( 'Sorry, no posts matched your criteria.' , 'text-domain'); ?></p>
+        <?php endif; ?>
+
+    </div><!-- /.posts-lists -->
+<?php }
