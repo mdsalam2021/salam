@@ -1,0 +1,544 @@
+<?php
+if (!defined('ABSPATH')) {
+    die('-1');
+}
+
+if (class_exists('WPBakeryShortCode')) {
+
+    class WPBakeryShortCode_Inova_Blogs extends WPBakeryShortCode {
+
+        protected function content($atts, $content = null) {
+            extract(shortcode_atts(
+                array(
+                    'title_text' => 'Latest Blogs',
+                    'stitle_font_size' => '',
+                    'stitle_font_weight' => '',
+                    'stitle_text_transform' => '',
+                    'stitle_color' => '',
+                    'subtitle_text' => '',
+                    'subtitle_font_size' => '',
+                    'subtitle_font_weight' => '',
+                    'subtitle_text_transform' => '',
+                    'subtitle_color' => '',
+                    'blog_styles' => 'style_1',
+                    'title_styles' => 'style_1',
+                    'number_of_blogs' => '4',
+                    'blog_column' => 'two',
+                    'blog_background_color' => '',
+                    'blog_title_font_size' => '',
+                    'blog_title_font_weight' => '',
+                    'title_text_transform' => '',
+                    'blog_title_color' => '',
+                    'blog_title_hcolor' => '',
+                    'blog_content_font_size' => '',
+                    'blog_content_font_weight' => '',
+                    'blog_content_color' => '',
+                    'blog_content_numbers' => 30,
+                    'content_text_transform' => '',
+                    'blog_page_button' => 'show',
+                    'blog_button_text' => 'Go To Blogs',
+                    'more_button_font_size' => '',
+                    'more_button_font_weight' => '',
+                    'button_text_transform' => '',
+                    'blog_date_format' => 'd F Y',
+                    'btn_radius' => '3px',
+                    'btn_ptb' => '15px',
+                    'btn_plr' => '60px',
+                    'btn_text_color' => '#fff',
+                    'btn_bg_color' => '#1aabec',
+                    'btn_bdr_color' => '#1aabec',
+                    'btn_bdr_width' => '1px',
+                    'btn_hover_text_color' => '#fff',
+                    'btn_hover_bg_color' => '#0691cf',
+                    'btn_hover_bdr_color' => '#0691cf',
+                ), $atts));
+
+            $stitle_s = !empty($stitle_font_size) ? 'font-size: ' . ($stitle_font_size) . ';' : '';
+            $stitle_w = !empty($stitle_font_weight) ? 'font-weight: ' . ($stitle_font_weight) . ';' : '';
+            $stitle_t = !empty($stitle_text_transform) ? 'text-transform: ' . ($stitle_text_transform) . ';' : '';
+            $stitle_c = !empty($stitle_color) ? 'color: ' . ($stitle_color) . ';' : '';
+            $stitle_style = ($stitle_s) . ($stitle_w) . ($stitle_t) . ($stitle_c);
+
+            $subtitle_s = !empty($subtitle_font_size) ? 'font-size: ' . ($subtitle_font_size) . ';' : '';
+            $subtitle_w = !empty($subtitle_font_weight) ? 'font-weight: ' . ($subtitle_font_weight) . ';' : '';
+            $subtitle_t = !empty($subtitle_text_transform) ? 'text-transform: ' . ($subtitle_text_transform) . ';' : '';
+            $subtitle_c = !empty($subtitle_color) ? 'color: ' . ($subtitle_color) . ';' : '';
+            $subtitle_style = ($subtitle_s) . ($subtitle_w) . ($subtitle_t) . ($subtitle_c);
+
+            $blog_title_s = !empty($blog_title_font_size) ? 'font-size: ' . ($blog_title_font_size) . ';' : '';
+            $blog_title_w = !empty($blog_title_font_weight) ? 'font-weight: ' . ($blog_title_font_weight) . ';' : '';
+            $blog_title_t = !empty($blog_title_text_transform) ? 'text-transform: ' . ($blog_title_text_transform) . ';' : '';
+            $blog_title_c = !empty($blog_title_color) ? 'color: ' . ($blog_title_color) . ';' : '';
+            $blog_title_style = ($blog_title_s) . ($blog_title_w) . ($blog_title_t) . ($blog_title_c);
+
+            $blog_content_s = !empty($blog_content_font_size) ? 'font-size: ' . ($blog_content_font_size) . ';' : '';
+            $blog_content_w = !empty($blog_content_font_weight) ? 'font-weight: ' . ($blog_content_font_weight) . ';' : '';
+            $blog_content_t = !empty($blog_content_text_transform) ? 'text-transform: ' . ($blog_content_text_transform) . ';' : '';
+            $blog_content_c = !empty($blog_content_color) ? 'color: ' . ($blog_content_color) . ';' : '';
+            $blog_content_style = ($blog_content_s) . ($blog_content_w) . ($blog_content_t) . ($blog_content_c);
+
+            $more_button_s = !empty($more_button_font_size) ? 'font-size: ' . ($more_button_font_size) . ';' : '';
+            $more_button_w = !empty($more_button_font_weight) ? 'font-weight: ' . ($more_button_font_weight) . ';' : '';
+            $more_button_t = !empty($more_button_text_transform) ? 'text-transform: ' . ($more_button_text_transform) . ';' : '';
+
+
+            $btn_style = '';
+
+            $btradius = !empty($btn_radius) ? 'border-radius:' . ($btn_radius) . ';' : '';
+            $ptb = !empty($btn_ptb) ? 'padding-top:' . ($btn_ptb) . '; padding-bottom:' . ($btn_ptb) . ';' : '';
+            $plr = !empty($btn_plr) ? 'padding-left:' . ($btn_plr) . '; padding-right:' . ($btn_plr) . ';' : '';
+
+            $btcolor = !empty($btn_text_color) ? 'color:' . ($btn_text_color) . ';' : '';
+            $bgcolor = !empty($btn_bg_color) ? 'background:' . ($btn_bg_color) . ';' : 'background: transparent;';
+            $bdr = !empty($btn_bdr_color) ? 'border:' . $btn_bdr_width . ' solid ' . ($btn_bdr_color) . ';' : '';
+
+            $bdr2 = !empty($btn_bdr_color) ? $btn_bdr_color : 'transparent';
+            $bgcolor2 = !empty($btn_bg_color) ? $btn_bg_color : 'transparent';
+            $btcolor2 = !empty($btn_text_color) ? $btn_text_color : '';
+
+            $hbdr = !empty($btn_hover_bdr_color) ? $btn_hover_bdr_color : 'transparent';
+            $hbgcolor = !empty($btn_hover_bg_color) ? $btn_hover_bg_color : 'transparent';
+            $hbtcolor = !empty($btn_hover_text_color) ? $btn_hover_text_color : '';
+
+            $btn_style = $btradius . $ptb . $plr . $btcolor . $bgcolor . $bdr . $more_button_s . $more_button_w . $more_button_t;
+
+            $bg = !empty($blog_background_color) ? "background: " . $blog_background_color . ";" : '';
+
+            $round_or_square = !empty($round_or_square) ? $round_or_square : '';
+            ?>
+            <?php
+            ob_start();
+
+
+            if ($blog_styles == 'style_1') {
+                $author = '';
+                ?>
+                <div class="blog-area">
+                    <div class="container">
+                        <?php
+                        if ($title_styles == 'style_1') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title">
+                                    <h2 style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h2>
+                                    <p style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></p>
+                                </div>
+                                <?php
+                            }
+                        } else if ($title_styles == 'style_2') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title section-title-tw">
+                                    <h4 class="title-tw" style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h4>
+                                    <h2 style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></h2>
+                                    <span class="title-border-bottom"></span>
+                                </div>
+                                <?php
+                            }
+                        } else if ($title_styles == 'style_3') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title section-title-tw2">
+                                    <h2 style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h2>
+                                    <p style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></p>
+                                    <span class="title-border-bottom"></span>
+                                </div>
+                                <?php
+                            }
+                        }
+                        ?>
+                        <div class="row blogs">
+                            <?php
+                            $post_argument = array('post_type' => 'post', 'posts_per_page' => intval($number_of_blogs));
+                            $post_items = new WP_Query($post_argument);
+                            $count = 0;
+                            if ($post_items->have_posts()) {
+                                while ($post_items->have_posts()): $post_items->the_post();
+                                    if( $count <= 2){?>
+                                        <div class="col-md-4 col-sm-6">
+                                            <div style="<?php echo esc_attr($bg); ?>;" class="blog-item">
+                                                <a href="<?php the_permalink(); ?>" class="img">
+                                                    <?php
+                                                    if (has_post_thumbnail()) :
+                                                        echo get_the_post_thumbnail(get_the_ID(), 'inova_370_310', array('class' => 'img-responsive'));
+                                                    endif;
+                                                    ?>
+                                                </a>
+                                                <div class="texts">
+                                                    <span><?php the_time($blog_date_format); ?> <?php echo esc_html($author); ?></span>
+                                                    <h2 style="<?php echo esc_attr($blog_title_style); ?>" class="th-h2"><a
+                                                                href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                                                    <?php echo inova_read_more(intval($blog_content_numbers)); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php }else{ ?>
+                                        <div class="col-md-6 col-sm-6">
+                                            <div style="<?php echo esc_attr($bg); ?>;" class="blog-item">
+                                                <a href="<?php the_permalink(); ?>" class="img">
+                                                    <?php
+                                                    if (has_post_thumbnail()) :
+                                                        echo get_the_post_thumbnail(get_the_ID(), 'full', array('class' => 'img-responsive'));
+                                                    endif;
+                                                    ?>
+                                                </a>
+                                                <div class="texts">
+                                                    <span><?php the_time($blog_date_format); ?> <?php echo esc_html($author); ?></span>
+                                                    <h2 style="<?php echo esc_attr($blog_title_style); ?>" class="th-h2"><a
+                                                                href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                                                    <?php echo inova_read_more(intval($blog_content_numbers)); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php }
+                                    ?>
+
+                                    <!-- Blog Item -->
+                                    <?php
+                                    $count; endwhile;
+                            }
+                            ?>
+                        </div>
+                        <?php
+                        if ($blog_page_button == 'show') {
+                            ?>
+                            <a
+                                    onmouseleave="this.style.borderColor='<?php echo esc_attr($bdr2); ?>'; this.style.backgroundColor='<?php echo esc_attr($bgcolor2); ?>'; this.style.color='<?php echo esc_attr($btcolor2); ?>'"
+                                    onmouseenter="this.style.borderColor='<?php echo esc_attr($hbdr); ?>'; this.style.backgroundColor='<?php echo esc_attr($hbgcolor); ?>'; this.style.color='<?php echo esc_attr($hbtcolor); ?>';"
+                                    style="<?php echo esc_attr($btn_style); ?>"
+                                    href="<?php echo esc_url(inova_get_blog_posts_page_url()); ?>" class="btn product-btn blog-btn blog2-btn"><?php echo esc_html($blog_button_text); ?></a>
+                        <?php }
+                        ?>
+                    </div>
+                </div>
+
+                <?php
+            } else if ($blog_styles == 'style_2') {
+                $author = '';
+                ?>
+                <section class="blog-area form-blog">
+                    <div class="container">
+                        <?php
+                        if ($title_styles == 'style_1') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title">
+                                    <h2 style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h2>
+                                    <p style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></p>
+                                </div>
+                                <?php
+                            }
+                        } else if ($title_styles == 'style_2') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title section-title-tw">
+                                    <h4 class="title-tw" style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h4>
+                                    <h2 style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></h2>
+                                    <span class="title-border-bottom"></span>
+                                </div>
+                                <?php
+                            }
+                        } else if ($title_styles == 'style_3') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title section-title-tw2">
+                                    <h2 style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h2>
+                                    <p style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></p>
+                                    <span class="title-border-bottom"></span>
+                                </div>
+                                <?php
+                            }
+                        }
+                        ?>
+                        <div class="row blogs pr-blog">
+                            <?php
+                            $post_argument = array('post_type' => 'post', 'posts_per_page' => intval($number_of_blogs));
+                            $post_items = new WP_Query($post_argument);
+                            if ($post_items->have_posts()) {
+                                while ($post_items->have_posts()): $post_items->the_post();
+                                    ?>
+                                    <div class="col-md-4 col-sm-6">
+                                        <div style="<?php echo esc_attr($bg); ?>;" class="blog-item">
+                                            <a href="<?php the_permalink(); ?>" class="img">
+                                                <?php
+                                                if (has_post_thumbnail()) :
+                                                    echo get_the_post_thumbnail(get_the_ID(), 'inova_370_310', array('class' => 'img-responsive'));
+                                                endif;
+                                                ?>
+                                            </a>
+                                            <div class="texts">
+                                                <span><?php the_time($blog_date_format); ?> <?php echo esc_html($author); ?></span>
+                                                <h2 style="<?php echo esc_attr($blog_title_style); ?>" class="th-h2"><a
+                                                            href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                                                <?php echo inova_read_more(intval($blog_content_numbers)); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Blog Item -->
+                                <?php
+                                endwhile;
+                            }
+                            ?>
+                        </div>
+                        <?php
+                        if ($blog_page_button == 'show') {
+                            ?>
+                            <a onmouseleave="this.style.borderColor='<?php echo esc_attr($bdr2); ?>'; this.style.backgroundColor='<?php echo esc_attr($bgcolor2); ?>'; this.style.color='<?php echo esc_attr($btcolor2); ?>'"
+                               onmouseenter="this.style.borderColor='<?php echo esc_attr($hbdr); ?>'; this.style.backgroundColor='<?php echo esc_attr($hbgcolor); ?>'; this.style.color='<?php echo esc_attr($hbtcolor); ?>';"
+                               style="<?php echo esc_attr($btn_style); ?>"
+                               href="<?php echo esc_url(inova_get_blog_posts_page_url()); ?>" class="btn product-btn blog-btn"><?php echo esc_html($blog_button_text); ?></a>
+                        <?php }
+                        ?>
+                    </div>
+                </section>
+                <?php
+            } else if ($blog_styles == 'style_3') {
+                $author = 'By ' . get_the_author();
+                ?>
+                <div class="lt-blog-area lt-blog-area2">
+                    <div class="container">
+                        <?php
+                        if ($title_styles == 'style_1') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title">
+                                    <h2 style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h2>
+                                    <p style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></p>
+                                </div>
+                                <?php
+                            }
+                        } else if ($title_styles == 'style_2') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title section-title-tw">
+                                    <h4 class="title-tw" style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h4>
+                                    <h2 style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></h2>
+                                    <span class="title-border-bottom"></span>
+                                </div>
+                                <?php
+                            }
+                        } else if ($title_styles == 'style_3') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title section-title-tw2">
+                                    <h2 style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h2>
+                                    <p style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></p>
+                                    <span class="title-border-bottom"></span>
+                                </div>
+                                <?php
+                            }
+                        }
+                        ?>
+                        <div class="row blogs">
+                            <?php
+                            $post_argument = array('post_type' => 'post', 'posts_per_page' => intval($number_of_blogs));
+                            $post_items = new WP_Query($post_argument);
+                            if ($post_items->have_posts()) {
+                                while ($post_items->have_posts()): $post_items->the_post();
+                                    ?>
+                                    <div class="col-sm-6">
+                                        <div style="<?php echo esc_attr($bg); ?>;" class="blog-item">
+                                            <a href="<?php the_permalink(); ?>" class="img">
+                                                <?php
+                                                if (has_post_thumbnail()) :
+                                                    echo get_the_post_thumbnail(get_the_ID(), 'inova_570_350', array('class' => 'img-responsive'));
+                                                endif;
+                                                ?>
+                                            </a>
+                                            <div class="texts">
+                                                <span><?php the_time($blog_date_format); ?> <?php echo esc_html($author); ?></span>
+                                                <h2 style="<?php echo esc_attr($blog_title_style); ?>" class="th-h2"><a
+                                                            href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                                                <?php echo inova_read_more(intval($blog_content_numbers)); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Blog Item -->
+                                <?php
+                                endwhile;
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <?php
+                    if ($blog_page_button == 'show') {
+                        ?>
+                        <a onmouseleave="this.style.borderColor='<?php echo esc_attr($bdr2); ?>'; this.style.backgroundColor='<?php echo esc_attr($bgcolor2); ?>'; this.style.color='<?php echo esc_attr($btcolor2); ?>'"
+                           onmouseenter="this.style.borderColor='<?php echo esc_attr($hbdr); ?>'; this.style.backgroundColor='<?php echo esc_attr($hbgcolor); ?>'; this.style.color='<?php echo esc_attr($hbtcolor); ?>';"
+                           style="<?php echo esc_attr($btn_style); ?>"
+                           href="<?php echo esc_url(inova_get_blog_posts_page_url()); ?>" class="btn product-btn blog-btn blog2-btn"><?php echo esc_html($blog_button_text); ?></a>
+                    <?php }
+                    ?>
+                </div>
+
+                <?php
+            } else if ($blog_styles == 'style_4') {
+                $author = 'By ' . get_the_author();
+                ?>
+                <section class="lt-blog-area lt-blog-area2">
+                    <div class="container">
+                        <?php
+                        if ($title_styles == 'style_1') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title">
+                                    <h2 style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h2>
+                                    <p style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></p>
+                                </div>
+                                <?php
+                            }
+                        } else if ($title_styles == 'style_2') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title section-title-tw">
+                                    <h4 class="title-tw" style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h4>
+                                    <h2 style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></h2>
+                                    <span class="title-border-bottom"></span>
+                                </div>
+                                <?php
+                            }
+                        } else if ($title_styles == 'style_3') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title section-title-tw2">
+                                    <h2 style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h2>
+                                    <p style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></p>
+                                    <span class="title-border-bottom"></span>
+                                </div>
+                                <?php
+                            }
+                        }
+                        ?>
+                        <div class="row blogs">
+                            <?php
+                            $post_argument = array('post_type' => 'post', 'posts_per_page' => intval($number_of_blogs));
+                            $post_items = new WP_Query($post_argument);
+                            if ($post_items->have_posts()) {
+                                while ($post_items->have_posts()): $post_items->the_post();
+                                    ?>
+                                    <div class="col-sm-6">
+                                        <div style="<?php echo esc_attr($bg); ?>;" class="blog-item">
+                                            <a href="<?php the_permalink(); ?>" class="img">
+                                                <?php
+                                                if (has_post_thumbnail()) :
+                                                    echo get_the_post_thumbnail(get_the_ID(), 'inova_570_350', array('class' => 'img-responsive'));
+                                                endif;
+                                                ?>
+                                            </a>
+                                            <div class="texts">
+                                                <span><?php the_time($blog_date_format); ?> <?php echo esc_html($author); ?></span>
+                                                <h2 style="<?php echo esc_attr($blog_title_style); ?>" class="th-h2"><a
+                                                            href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                                                <?php echo inova_read_more(intval($blog_content_numbers)); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Blog Item -->
+                                <?php
+                                endwhile;
+                            }
+                            ?>
+
+                        </div>
+                        <?php
+                        if ($blog_page_button == 'show') {
+                            ?>
+                            <a onmouseleave="this.style.borderColor='<?php echo esc_attr($bdr2); ?>'; this.style.backgroundColor='<?php echo esc_attr($bgcolor2); ?>'; this.style.color='<?php echo esc_attr($btcolor2); ?>'"
+                               onmouseenter="this.style.borderColor='<?php echo esc_attr($hbdr); ?>'; this.style.backgroundColor='<?php echo esc_attr($hbgcolor); ?>'; this.style.color='<?php echo esc_attr($hbtcolor); ?>';"
+                               style="<?php echo esc_attr($btn_style); ?>"
+                               href="<?php echo esc_url(inova_get_blog_posts_page_url()); ?>" class="btn product-btn blog-btn blog2-btn s-price-btn"><?php echo esc_html($blog_button_text); ?></a>
+                        <?php }
+                        ?>
+                    </div>
+                </section>
+
+                <?php
+            }elseif ($blog_styles == 'style_5') {
+                $author = 'By: ' . get_the_author();
+                ?>
+                <div class="blog-area blog-area5">
+                    <div class="container">
+                        <?php
+                        if ($title_styles == 'style_1') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title">
+                                    <h2 style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h2>
+                                    <p style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></p>
+                                </div>
+                                <?php
+                            }
+                        } else if ($title_styles == 'style_2') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title section-title-tw">
+                                    <h4 class="title-tw" style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h4>
+                                    <h2 style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></h2>
+                                    <span class="title-border-bottom"></span>
+                                </div>
+                                <?php
+                            }
+                        } else if ($title_styles == 'style_3') {
+                            if (!empty($title_text) || !empty($subtitle_text)) {
+                                ?>
+                                <div class="section-title section-title-tw2">
+                                    <h2 style="<?php echo esc_attr($stitle_style); ?>"><?php echo wp_kses($title_text, inova_allowed_html()); ?></h2>
+                                    <p style="<?php echo esc_attr($subtitle_style); ?>"><?php echo wp_kses($subtitle_text, inova_allowed_html()); ?></p>
+                                    <span class="title-border-bottom"></span>
+                                </div>
+                                <?php
+                            }
+                        }
+                        ?>
+                        <div class="row blogs">
+                            <?php
+                            $post_argument = array('post_type' => 'post', 'posts_per_page' => intval($number_of_blogs));
+                            $post_items = new WP_Query($post_argument);
+                            if ($post_items->have_posts()) {
+                                while ($post_items->have_posts()): $post_items->the_post();
+                                    ?>
+                                    <div class="col-md-4 col-sm-6">
+                                        <div style="<?php echo esc_attr($bg); ?>;" class="blog-item">
+                                            <a href="<?php the_permalink(); ?>" class="img">
+                                                <?php
+                                                if (has_post_thumbnail()) :
+                                                    echo get_the_post_thumbnail(get_the_ID(), 'inova_370_310', array('class' => 'img-responsive'));
+                                                endif;
+                                                ?>
+                                            </a>
+                                            <div class="texts">
+                                                <span class="date-author"><?php echo esc_html($author); ?> | <?php the_time($blog_date_format); ?> </span>
+                                                <h2 style="<?php echo esc_attr($blog_title_style); ?>" class="th-h2"><a
+                                                            href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                                                <?php echo inova_read_more_5(intval($blog_content_numbers)); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Blog Item -->
+                                <?php
+                                endwhile;
+                            }
+                            ?>
+                        </div>
+                        <?php
+                        if ($blog_page_button == 'show') {
+                            ?>
+                            <a
+                                    onmouseleave="this.style.borderColor='<?php echo esc_attr($bdr2); ?>'; this.style.backgroundColor='<?php echo esc_attr($bgcolor2); ?>'; this.style.color='<?php echo esc_attr($btcolor2); ?>'"
+                                    onmouseenter="this.style.borderColor='<?php echo esc_attr($hbdr); ?>'; this.style.backgroundColor='<?php echo esc_attr($hbgcolor); ?>'; this.style.color='<?php echo esc_attr($hbtcolor); ?>';"
+                                    style="<?php echo esc_attr($btn_style); ?>"
+                                    href="<?php echo esc_url(inova_get_blog_posts_page_url()); ?>" class="btn product-btn blog-btn blog2-btn"><?php echo esc_html($blog_button_text); ?></a>
+                        <?php }
+                        ?>
+                    </div>
+                </div>
+
+                <?php
+            }
+
+            return ob_get_clean();
+        }
+
+    }
+
+}
