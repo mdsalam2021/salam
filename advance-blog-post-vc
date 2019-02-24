@@ -1,0 +1,461 @@
+<?php
+if (!defined("ABSPATH")) {
+    die("-1");
+}
+
+add_action("vc_before_init",
+    function () {
+        vc_map(
+            array(
+                "name" => esc_html__("Blog Post", "text-domain"),
+                "base" => "inova_blogs",
+                "icon" => esc_url(INOVA_THEME_ASSETS_IMG_URI)."/vc_icons/others/Blog.png",
+                "category" => esc_html__("Inova Others", "text-domain"),
+                "description" => esc_html__("Create a stream of blog posts", "text-domain"),
+                "params" => array(
+                    array(
+                        "type" => "dropdown",
+                        "heading" => esc_html__("Title Styles", "text-domain"),
+                        "param_name" => "title_styles",
+                        "value" => array(
+                            esc_html__("Style - 1", "text-domain") => "style_1",
+                            esc_html__("Style - 2", "text-domain") => "style_2",
+                            esc_html__("Style - 3", "text-domain") => "style_3",
+                        ),
+                        "description" => esc_html__("Select your section title style.", "text-domain"),
+                    ),
+                    array(
+                        "type" => "custom_input_image",
+                        "param_name" => "title_style_one",
+                        "value" => INOVA_THEME_ASSETS_IMG_URI . "/shortcodes/title_1.png",
+                        "dependency" => array(
+                            "element" => "title_styles",
+                            "value" => "style_1",
+                        ),
+                    ),
+                    array(
+                        "type" => "custom_input_image",
+                        "param_name" => "title_style_two",
+                        "value" => INOVA_THEME_ASSETS_IMG_URI . "/shortcodes/title_2.png",
+                        "dependency" => array(
+                            "element" => "title_styles",
+                            "value" => "style_2",
+                        ),
+                    ),
+                    array(
+                        "type" => "custom_input_image",
+                        "param_name" => "title_style_three",
+                        "value" => INOVA_THEME_ASSETS_IMG_URI . "/shortcodes/title_3.png",
+                        "dependency" => array(
+                            "element" => "title_styles",
+                            "value" => "style_3",
+                        ),
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "heading" => esc_html__("Title Text", "text-domain"),
+                        "param_name" => "title_text",
+                        "admin_label" => TRUE,
+                        "value" => 'Latest Blogs',
+                        "description" => esc_html__("Enter section title text here.", "text-domain")
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Title", "text-domain"),
+                        "heading" => esc_html__("Font Size", "text-domain"),
+                        "param_name" => "stitle_font_size",
+                        "value" => "",
+                        "description" => esc_html__("Enter section title font size in pixel.", "text-domain")
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__("Title", "text-domain"),
+                        "heading" => esc_html__("Font Weight", "text-domain"),
+                        "param_name" => "stitle_font_weight",
+                        "value" => font_weight_values(),
+                        "std" => "",
+                        "description" => esc_html__("Select your section title font weight. Default: 600", "text-domain"),
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__("Title", "text-domain"),
+                        "heading" => esc_html__("Text Transform", "text-domain"),
+                        "param_name" => "stitle_text_transform",
+                        "value" => text_transform_values(),
+                        "std" => "",
+                        "description" => esc_html__("Select your section title text transform.", "text-domain"),
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Title", "text-domain"),
+                        "heading" => esc_html__("Title Color", "text-domain"),
+                        "param_name" => "stitle_color",
+                        "description" => esc_html__("Pick color for your section title.", "text-domain")
+                    ),
+                    array(
+                        "type" => "textarea",
+                        "heading" => esc_html__("Subtitle Text", "text-domain"),
+                        "param_name" => "subtitle_text",
+                        "admin_label" => TRUE,
+                        "value" => '',
+                        "description" => esc_html__("Enter section subtitle text here.", "text-domain")
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Subtitle", "text-domain"),
+                        "heading" => esc_html__("Font Size", "text-domain"),
+                        "param_name" => "subtitle_font_size",
+                        "value" => "",
+                        "description" => esc_html__("Enter section subtitle font size in pixel.", "text-domain")
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__("Subtitle", "text-domain"),
+                        "heading" => esc_html__("Font Weight", "text-domain"),
+                        "param_name" => "subtitle_font_weight",
+                        "value" => font_weight_values(),
+                        "std" => "400",
+                        "description" => esc_html__("Select your section subtitle font weight.", "text-domain"),
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__("Subtitle", "text-domain"),
+                        "heading" => esc_html__("Text Transform", "text-domain"),
+                        "param_name" => "subtitle_text_transform",
+                        "value" => text_transform_values(),
+                        "std" => "",
+                        "description" => esc_html__("Select your section subtitle text transform.", "text-domain"),
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Subtitle", "text-domain"),
+                        "heading" => esc_html__("Text Color", "text-domain"),
+                        "param_name" => "subtitle_color",
+                        "description" => esc_html__("Pick color for your section subtitle.", "text-domain")
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "heading" => esc_html__("Number of Blogs", "text-domain"),
+                        "param_name" => "number_of_blogs",
+                        "value" => 4,
+                        "admin_label" => TRUE,
+                        "description" => esc_html__("Enter number of blogs you want to show. Default 4", "text-domain")
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "heading" => esc_html__("Blog Styles", "text-domain"),
+                        "param_name" => "blog_styles",
+                        "value" => array(
+                            esc_html__("Style - 1", "text-domain") => "style_1",
+                            esc_html__("Style - 2", "text-domain") => "style_2",
+                            esc_html__("Style - 3", "text-domain") => "style_3",
+                            esc_html__("Style - 4", "text-domain") => "style_4",
+                            esc_html__("Style - 5", "text-domain") => "style_5",
+                        ),
+                        "description" => esc_html__("Select your blog section style.", "text-domain"),
+                    ),
+                    array(
+                        "type" => "custom_input_image",
+                        "param_name" => "blog_style_one",
+                        "value" => INOVA_THEME_ASSETS_IMG_URI . "/shortcodes/blog_1.png",
+                        "dependency" => array(
+                            "element" => "blog_styles",
+                            "value" => "style_1",
+                        ),
+                    ),
+                    array(
+                        "type" => "custom_input_image",
+                        "param_name" => "blog_style_two",
+                        "value" => INOVA_THEME_ASSETS_IMG_URI . "/shortcodes/blog_2.png",
+                        "dependency" => array(
+                            "element" => "blog_styles",
+                            "value" => "style_2",
+                        ),
+                    ),
+                    array(
+                        "type" => "custom_input_image",
+                        "param_name" => "blog_style_three",
+                        "value" => INOVA_THEME_ASSETS_IMG_URI . "/shortcodes/blog_3.png",
+                        "dependency" => array(
+                            "element" => "blog_styles",
+                            "value" => "style_3",
+                        ),
+                    ),
+                    array(
+                        "type" => "custom_input_image",
+                        "param_name" => "blog_style_four",
+                        "value" => INOVA_THEME_ASSETS_IMG_URI . "/shortcodes/blog_4.png",
+                        "dependency" => array(
+                            "element" => "blog_styles",
+                            "value" => "style_4",
+                        ),
+                    ),
+                    array(
+                        "type" => "custom_input_image",
+                        "param_name" => "blog_style_five",
+                        "value" => INOVA_THEME_ASSETS_IMG_URI . "/shortcodes/blog_5.png",
+                        "dependency" => array(
+                            "element" => "blog_styles",
+                            "value" => "style_5",
+                        ),
+                    ),
+                    
+                    array(
+                        "type" => "colorpicker",
+                        "value" => "",
+                        "heading" => esc_html__("Blog Background Color", "text-domain"),
+                        "param_name" => "blog_background_color",
+                        "description" => esc_html__("Pick color for blog background.", "text-domain")
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Heading", "text-domain"),
+                        "heading" => esc_html__("Font Size", "text-domain"),
+                        "param_name" => "blog_title_font_size",
+                        "value" => "",
+                        "description" => esc_html__("Enter blog title font size in pixel.", "text-domain")
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__("Heading", "text-domain"),
+                        "heading" => esc_html__("Font Weight", "text-domain"),
+                        "param_name" => "blog_title_font_weight",
+                        "value" => font_weight_values(),
+                        "description" => esc_html__("Select your blog title font weight.", "text-domain"),
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__( "Heading", "text-domain" ),
+                        "heading" => esc_html__("Text Transform", "text-domain"),
+                        "param_name" => "title_text_transform",
+                        "value" => text_transform_values(),
+                        "description" => esc_html__("Select your blog title text transform.", "text-domain"),
+
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "heading" => esc_html__("Limit Content Numbers", "text-domain"),
+                        "param_name" => "blog_content_numbers",
+                        "value" => "30",
+                        "description" => esc_html__("How many limit number of your blog content?. Enter just numeric value. Default: 0", "text-domain")
+                    ),
+                    
+                    
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__("Date", "text-domain"),
+                        "heading" => esc_html__("Blog Date Format", "text-domain"),
+                        "param_name" => "blog_date_format",
+                        "admin_label" => TRUE,
+                        "value" => array(
+                            "02 February 2017" => "d F Y",
+                            "02 Feb 2017" => "d M Y",
+                            "02 Feb 17" => "d M y",
+                            "November 6, 2010 12:50 am" => "F j, Y g:i a",
+                            "November 6, 2010" => "F j, Y",
+                            "November, 2010" => "F, Y",
+                            "12:50 am" => "g:i a",
+                            "12:50:48 am" => "g:i:s a",
+                            "Saturday, November 6th, 2010" => "l, F jS, Y",
+                            "Nov 6, 2010 @ 0:50" => "M j, Y @ G:i",
+                            "2010/11/06 at 12:50 AM" => "Y/m/d \a\t g:i A",
+                            "2010/11/06 at 12:50am" => "Y/m/d \a\t g:ia",
+                            "2010/11/06 12:50:48 AM" => "Y/m/d g:i:s A",
+                            "2010/11/06" => "Y/m/d",
+                        ),
+                        "description" => esc_html__("Date option.", "text-domain"),
+                    ),
+                    
+
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "heading" => esc_html__("Blog Button", "text-domain"),
+                        "param_name" => "blog_page_button",
+                        "value" => array(
+                            "Show" => "show",
+                            "Hide" => "hide",
+                        ),
+                        "description" => esc_html__("Select whether you wish to show blog page button or not.", "text-domain"),
+                    ),
+                    
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "heading" => esc_html__("Blog Button Text", "text-domain"),
+                        "param_name" => "blog_button_text",
+                        "admin_label" => TRUE,
+                        "value" => "Go To Blogs",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button text for blogs page.", "text-domain")
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "heading" => esc_html__("More Button Font Size", "text-domain"),
+                        "param_name" => "more_button_font_size",
+                        "value" => "",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter more button font size in pixel.", "text-domain")
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__( "Button", "text-domain" ),
+                        "heading" => esc_html__("More Button Font Weight", "text-domain"),
+                        "param_name" => "more_button_font_weight",
+                        "value" => font_weight_values(),
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Select more button font weight.", "text-domain"),
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__( "Button", "text-domain" ),
+                        "heading" => esc_html__("Text Transform", "text-domain"),
+                        "param_name" => "button_text_transform",
+                        "value" => text_transform_values(),
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Select your blog button title text transform.", "text-domain"),
+
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Border Radius", "text-domain"),
+                        "param_name" => "btn_radius",
+                        "value" => "3px",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button border radius.", "text-domain"),
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Padding (Top-Bottom)", "text-domain"),
+                        "param_name" => "btn_ptb",
+                        "value" => "15px",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button padding top bottom.", "text-domain"),
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Padding (Left-Right)", "text-domain"),
+                        "param_name" => "btn_plr",
+                        "value" => "60px",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button padding left right.", "text-domain"),
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "heading" => esc_html__("Text Color", "text-domain"),
+                        "param_name" => "btn_text_color",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#fff',
+                        "description" => esc_html__("Pick color for button text.", "text-domain")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "heading" => esc_html__("Background Color", "text-domain"),
+                        "param_name" => "btn_bg_color",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#1aabec',
+                        "description" => esc_html__("Pick color for button background.", "text-domain")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "heading" => esc_html__("Border Color", "text-domain"),
+                        "param_name" => "btn_bdr_color",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#1aabec',
+                        "description" => esc_html__("Pick color for button border.", "text-domain")
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Border Width", "text-domain"),
+                        "param_name" => "btn_bdr_width",
+                        "value" => "1px",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button border widht.", "text-domain"),
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "heading" => esc_html__("Text Color(Hover)", "text-domain"),
+                        "param_name" => "btn_hover_text_color",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#fff',
+                        "description" => esc_html__("Pick color for button text.", "text-domain")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "heading" => esc_html__("Background Color(Hover)", "text-domain"),
+                        "param_name" => "btn_hover_bg_color",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#0691cf',
+                        "description" => esc_html__("Pick color for button background.", "text-domain")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "text-domain"),
+                        "heading" => esc_html__("Border Color(Hover)", "text-domain"),
+                        "param_name" => "btn_hover_bdr_color",
+                        "dependency" => array(
+                            "element" => "blog_page_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#0691cf',
+                        "description" => esc_html__("Pick color for button border.", "text-domain")
+                    ),
+                    
+                )
+            )
+        );
+    }
+);
