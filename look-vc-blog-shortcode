@@ -1,0 +1,365 @@
+<?php if ( ! defined( 'ABSPATH' ) ) die( 'Direct access forbidden.' );
+
+/**
+* Visual composer shortcde for blog post
+*/
+
+
+
+function font_weight_value() {
+    $font_weight_value = array(
+        esc_html__("Font Weight", "text-domain") => "",
+        esc_html__("Light-300", "text-domain") => "300",
+        esc_html__("Regular-400", "text-domain") => "400",
+        esc_html__("Medium-500", "text-domain") => "500",
+        esc_html__("Semi Bold-600", "text-domain") => "600",
+        esc_html__("Bold-700", "text-domain") => "700",
+        esc_html__("Extra Bold-900", "text-domain") => "900",
+    );
+    return $font_weight_value;
+}
+
+
+function text_transform_value() {
+    $text_transform_value = array(
+        esc_html__("Text Transform", "text-domain") => "",
+        esc_html__("Capitalize", "text-domain") => "capitalize",
+        esc_html__("Lowercase", "text-domain") => "lowercase",
+        esc_html__("Uppercase", "text-domain") => "uppercase",
+        esc_html__("Full Width", "text-domain") => "full-width",
+        esc_html__("Inherit", "text-domain") => "inherit",
+    );
+    return $text_transform_value;
+}
+
+    function thmelook_return($s){
+        return $s;
+    }
+
+if( ! function_exists('themelooks_getcat') ){
+    function themelooks_getcat(){
+        $categories_obj = get_categories();
+        $cats   = array();
+        $cats['All']  = '0';
+        foreach($categories_obj as $cat){
+            $cats[$cat->cat_name]   = $cat->term_id;
+        }
+        return $cats;
+    }
+}
+
+if( function_exists('vc_map') ){
+    class WPBakeryShortCode_blogs_post extends WPBakeryShortCode{
+        protected function content($atts, $content = null){
+            extract(shortcode_atts(array(
+                'cat_id'    => '',
+                'title_font_size'    => '',
+                'title_font_weight'    => '',
+                'title_text_transform'    => '',
+                'title_color'    => '',
+                'categorie_slug'    => '',
+                'tag'       => '',
+                'orderby'       => '',
+                'order'         => '',
+                'blog_date_format'  => '',
+                'meta'          => '',
+                'limit'         => 2,
+                'show_excrpt'  => '',
+                'excerpt'       => 20,
+                'el_class'      => '',
+            ), $atts));
+
+            ob_start();
+            themelooks_blog_post($cat_id, $title_font_size, $title_font_weight, $title_text_transform, $title_color, $categorie_slug, $tag, $orderby, $order, $meta, $limit, $blog_date_format, $show_excrpt, $excerpt, $el_class);
+            return ob_get_clean();
+        }
+    }
+
+
+    $cats[]     = themelooks_getcat();
+
+    vc_map(array(
+        'base'      => 'blogs_post',
+        'name'      => esc_html__('Blog Post', 'text-domain'),
+        'class'     => '',
+        'category'  => esc_html__('Theme Name', 'text-domain'),
+        'icon'      => '',
+        'params'    => array(
+            array(
+                'type'      => 'dropdown',
+                'heading'   => esc_html__('Select categories', 'text-domain'),
+                'param_name'    => 'cat_id',
+                'value'         => themelooks_getcat(),
+                'description'   => esc_html__('Select Categories to display', 'text-domain'),
+            ),
+            array(
+                'type'      => 'textfield',
+                'heading'   => esc_html__('Multiple categories to display', 'text-domain'),
+                'param_name'    => 'categorie_slug',
+                'description'   => esc_html__('Filter multiple categories by category slug separated by commas Eg: design,sports,hosting. Leave empty if you want to select category from dropdown list above', 'text-domain'),
+            ),
+            array(
+                'type'      => 'textfield',
+                'heading'   => esc_html__('Filter by tag slug', 'text-domain'),
+                'param_name'    => 'tag',
+                'description'   => esc_html__('To filter multiple tag slugs, enter here the tag slugs separated by commas(ex: tag1,tag2,tag3). Leave empty if you want to display post form category or category slug', 'text-domain'),
+            ),
+            array(
+                'type'          => 'dropdown',
+                'heading'       => esc_html__('Order By:', 'text-domain'),
+                'param_name'    => 'orderby',
+                'description'   => esc_html__('Select how to sort retrieved posts.', 'text-domain'),
+                'value'         => array(
+                    esc_html__('Select order by', 'text-domain'),
+                    esc_html__('Date', 'text-domain')  => 'date',
+                    esc_html__('Name', 'text-domain' ) => 'name',
+                    esc_html__('Modified', 'text-domain')   => 'modified',
+                    esc_html__('Author', 'text-domain') => 'author',
+                    esc_html__('Random', 'text-domain') => 'rand',
+                    esc_html__('Comment Count', 'text-domain') => 'comment_count',
+                ),
+            ),
+            array(
+                'type'      => 'dropdown',
+                'heading'   => esc_html__('Order:', 'text-domain'),
+                'param_name'    => 'order',
+                'description'   => esc_html__('Designates the ascending or descending order', 'text-domain'),
+                'value'         => array(
+                    esc_html__('Select order', 'text-domain') => '',
+                    esc_html__('DESC', 'text-domain')   => 'DESC',
+                    esc_html__('ASC', 'text-domain')    => 'ASC',
+                )
+            ),
+            array(
+                'type'          => 'dropdown',
+                'heading'       => esc_html__('Blog Date format', 'text-domain'),
+                'param_name'    => 'blog_date_format',
+                'admin_label'   => TRUE,
+                'value'         => array(
+                    "02 February 2017" => "d F Y",
+                    "02 Feb 2017" => "d M Y",
+                    "02 Feb 17" => "d M y",
+                    "November 6, 2010 12:50 am" => "F j, Y g:i a",
+                    "November 6, 2010" => "F j, Y",
+                    "November, 2010" => "F, Y",
+                    "12:50 am" => "g:i a",
+                    "12:50:48 am" => "g:i:s a",
+                    "Saturday, November 6th, 2010" => "l, F jS, Y",
+                    "Nov 6, 2010 @ 0:50" => "M j, Y @ G:i",
+                    "2010/11/06 at 12:50 AM" => "Y/m/d \a\t g:i A",
+                    "2010/11/06 at 12:50am" => "Y/m/d \a\t g:ia",
+                    "2010/11/06 12:50:48 AM" => "Y/m/d g:i:s A",
+                    "2010/11/06" => "Y/m/d",
+                ),
+                'description'       => esc_html__('Date Option', 'text-domain'),
+            ),
+            array(
+                'param_name'    => 'meta',
+                'type'          => 'checkbox',
+                'heading'       => esc_html__('Display meta description', 'text-domain'),
+                'description'   => esc_html__("Don't forget to check 'Yes' if you want to display meta description of post on list", "text-domain"),
+            ),
+            array(
+                'type'          => 'textfield',
+                'heading'       => esc_html__('Posts per page', 'text-domain'),
+                'param_name'    => 'limit',
+                'description'   => esc_html__('Limit of total post Eg: 5, Default value id 5', 'text-domain'),
+                'default'       => '5',
+            ),
+            array(
+                'param_name'    => 'show_excrpt',
+                'type'          => 'checkbox',
+                'heading'       => esc_html__('Display post excerpt', 'text-domain'),
+                'description'   => esc_html__("Don't to display to check 'Yes' if you want to display meta description of post on list", "text-domain"),
+            ),
+            array(
+                'type'          => 'textfield',
+                'heading'       => esc_html__('Excerpt word limit', 'text-domain'),
+                'param_name'    => 'excerpt',
+                'dependency' => array(
+                    'element' => 'show_excrpt',
+                    'value' => 'true'
+                ),
+                'description'   => esc_html__('Word limit post excerpt Eg: 20, Default value is 20', 'text-domain'),
+            ),
+            array(
+                "type" => "textfield",
+                "group" => esc_html__("Title","text-domain"),
+                "heading" => esc_html__("Title Font Size","text-domain"),
+                "param_name" => "title_font_size",
+
+                "description" => esc_html__("Enter hero title font size in pixel.","text-domain")
+            ),
+            array(
+                "type" => "dropdown",
+                "group" => esc_html__("Title","text-domain"),
+                "heading" => esc_html__("Title Font Weight","text-domain"),
+                "param_name" => "title_font_weight",
+                "value" => font_weight_value(),
+                "description" => esc_html__("Select your hero title font weight. Default: Bold","text-domain"),
+            ),
+            array(
+                "type" => "dropdown",
+                "group" => esc_html__("Title","text-domain"),
+                "heading" => esc_html__("Title Text Transform","text-domain"),
+                "param_name" => "title_text_transform",
+                "value" => text_transform_value(),
+                "description" => esc_html__("Select your hero title text transform.","text-domain"),
+
+            ),
+            array(
+                "type" => "colorpicker",
+                "group" => esc_html__("Title","text-domain"),
+                "heading" => esc_html__("Title Color","text-domain"),
+                "param_name" => "title_color",
+                "description" => esc_html__("Pick color for your hero section title. Default color: #ffffff","text-domain")
+            ),
+            array(
+                "type" => "textarea",
+                "admin_label" => TRUE,
+                "heading" => esc_html__("Hero Sub-title","text-domain"),
+                "param_name" => "hero_subtitle",
+                "description" => esc_html__("Enter hero section sub title text here.","text-domain")
+            ),
+            array(
+                'type'          => 'textfield',
+                'param_name'    => 'el_class',
+                'heading'       => esc_html__('Extra class name:', 'text-domain'),
+                "description"   => esc_html__("If you wish to style particular content element differently, then use this field to add a class name and then refer to it in your css file.", 'text-domain')
+            )
+
+        )
+    ));
+}
+
+function themelooks_blog_post($cat_id, $title_font_size, $title_font_weight, $title_text_transform, $title_color, $categorie_slug, $tag, $orderby, $order, $meta, $limit, $blog_date_format, $show_excrpt, $excerpt, $el_class){
+    $unqID = uniqid();
+    $meta_description = (( $meta === 'true') ? 'yes' : null);
+    $excerpt_display  = (( $show_excrpt === 'true' ) ? 'yes' : null);
+
+    $title_s = !empty($title_font_size) ? "font-size: " . esc_attr($title_font_size) . "; " : '';
+    $title_w = !empty($title_font_weight) ? "font-weight: " . esc_attr($title_font_weight) . "; " : '';
+    $title_t = !empty($title_text_transform) ? "text-transform: " . esc_attr($title_text_transform) . "; " : '';
+    $title_c = !empty($title_color) ? "color: " . esc_attr($title_color) . "; " : '';
+    $title_style = esc_attr($title_s) . esc_attr($title_w) . esc_attr($title_t) . esc_attr($title_c);
+
+    ?>
+    <div class="container">
+        <?php
+            if($tag != ''){
+                $query_args = array(
+                    'post_type'         => 'post',
+                    'posts_per_page'    => $limit,
+                    'order'             => $order,
+                    'orderby'           => $orderby,
+                    'tag'               => $tag,
+                );
+            }elseif ($categorie_slug != '' && $tag == ''){
+                $query_args = array(
+                    'post_type'     => 'post',
+                    'post_status'   => 'publish',
+                    'posts_per_page'    => $limit,
+                    'order'             => $order,
+                    'orderby'           => $orderby,
+                    'category_name'     => $categorie_slug,
+                );
+            }elseif ($cat_id == true && !empty($cat_id[0]) && $categorie_slug = ''){
+                $query_args = array(
+                    'post_type'     => 'post',
+                    'post_status'   => 'publish',
+                    'tax_query' => array(
+                        array(
+                            'taxonomy' => 'category',
+                            'field'    => 'term_id',
+                            'terms'    => $cat_id,
+                        ),
+                    ),
+                    'posts_per_page'    =>  $limit,
+                    'order'             => $order,
+                    'orderby'		=> $orderby,
+                    'ignore_sticky_posts' => true,
+                );
+            }else{
+                $query_args = array(
+                    'post_type' => 'post',
+                    'post_status'         => 'publish',
+                    'posts_per_page'      =>  $limit,
+                    'order'		=> $order,
+                    'orderby'		=> $orderby,
+                    'ignore_sticky_posts' => true,
+                );
+            }
+
+        $the_query2 = array(
+            'post_type' => 'post',
+            'post_status'         => 'publish',
+            'posts_per_page'      => 3,
+            'order'		=> $order,
+            'orderby'		=> $orderby,
+            'ignore_sticky_posts' => true,
+        );
+
+        $the_query1 = new WP_Query( $query_args );
+        $the_query2 = new WP_Query( $the_query2 );
+        ?>
+            <div class="row">
+               <?php
+                if($the_query1->have_posts()) :
+                while ($the_query1->have_posts()) : $the_query1->the_post();?>
+                    <div class="col-md-6">
+                        <article class="post-item">
+                            <?php if( has_post_thumbnail() ) : ?>
+                                <div class="post-thumbnail">
+                                    <?php the_post_thumbnail('medium');?>
+                                </div>
+                            <?php endif; ?>
+                            <a href="<?php the_permalink();?>"><h4><?php the_title();?></h4></a>
+                            <span><?php esc_html_e('Posted by', 'text-domain'); ?></span>
+                            <?php the_author_posts_link(); ?>
+                            <span class="post-date"><?php the_time($blog_date_format); ?></span>
+                            <div class="cat-tags-links"><?php echo get_the_category_list(', '); ?></div>
+                        </article>
+                    </div>
+                <?php endwhile;
+                    wp_reset_postdata();
+                ?>
+                <?php else : ?>
+                    <p><?php esc_html_e('Sorry, no posts matched your criteria.', 'text-domain');?></p>
+                <?php endif;?>
+            </div>
+            <br>
+        <?php
+        if($the_query2->have_posts()) :
+            while ($the_query2->have_posts()) : $the_query2->the_post();?>
+                    <div class="col-md-4">
+                        <article class="post-item">
+                            <?php if( has_post_thumbnail() ) : ?>
+                                <div class="post-thumbnail">
+                                    <?php the_post_thumbnail('medium');?>
+                                </div>
+                            <?php endif; ?>
+                            <?php if('yes' == $excerpt_display) : ?>
+                            <p><?php
+                            $trimexcerpt = get_the_excerpt();
+                            $shortexcerpt = wp_trim_words($trimexcerpt, $excerpt);
+                            echo thmelook_return($shortexcerpt);
+                            ?>
+                            </p>
+                            <?php endif;?>
+                            <a href="<?php the_permalink();?>"><h4><?php the_title();?></h4></a>
+                            <span><?php esc_html_e('Posted by', 'text-domain'); ?></span>
+                            <?php the_author_posts_link(); ?>
+                            <span class="post-date"><?php the_time($blog_date_format); ?></span>
+                            <div class="cat-tags-links"><?php echo get_the_category_list(', '); ?></div>
+                        </article>
+                    </div>
+                <?php endwhile;
+            wp_reset_postdata();
+            ?>
+        <?php else : ?>
+            <p><?php esc_html_e('Sorry, no posts matched your criteria.', 'text-domain');?></p>
+        <?php endif;?>
+
+    </div>
+    <?php
+}
