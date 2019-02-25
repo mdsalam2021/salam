@@ -1,0 +1,252 @@
+<?php
+if (!defined('ABSPATH')) {
+    die('-1');
+}
+
+if (class_exists('WPBakeryShortCode')) {
+
+    class WPBakeryShortCode_Inova_Hero_App_Slider extends WPBakeryShortCode {
+
+        protected function content($atts, $content = null) {
+            $hero_app_sliders = '';
+            $hero_image = '';
+            $first_hero_app_button = '';
+            $second_hero_app_button = '';
+            extract(shortcode_atts(
+                            array(
+                'hero_title' => 'Bring new ideas to life, anywhere.',
+                'title_font_size' => '',
+                'title_font_weight' => '',
+                'title_text_transform' => '',
+                'title_color' => '',
+                'hero_subtitle' => 'A feeling You have never experienced before. Get hold of a future technology now',
+                'subtitle_font_size' => '',
+                'subtitle_font_weight' => '',
+                'subtitle_text_transform' => '',
+                'subtitle_color' => '',
+                'show_hide_first_button' => '',
+                'first_hero_app_button' => '',
+                'is_first_active' => '',
+                'show_hide_second_button' => '',
+                'second_hero_app_button' => '',
+                'btn_radius' => '3px',
+                'btn_ptb' => '16px',
+                'btn_plr' => '60px',
+                'btn_text_color' => '#3927ef ',
+                'btn_bg_color' => '#fff',
+                'btn_bdr_color' => '#fff',
+                'btn_bdr_width' => '2px',
+                'btn_hover_text_color' => '#fff',
+                'btn_hover_bg_color' => '',
+                'btn_hover_bdr_color' => '#fff',
+                'btn2_radius' => '3px',
+                'btn2_ptb' => '16px',
+                'btn2_plr' => '60px',
+                'btn2_text_color' => '#fff',
+                'btn2_bg_color' => '',
+                'btn2_bdr_color' => '#fff',
+                'btn2_bdr_width' => '2px',
+                'btn2_hover_text_color' => '#3927ef ',
+                'btn2_hover_bg_color' => '#fff',
+                'btn2_hover_bdr_color' => '#fff',
+                'is_overlay' => 'overlay',
+                'overlay_color' => 'gradient',
+                'hero_overlay_solid' => '',
+                'hero_overlay_primary_gradient' => '',
+                'hero_overlay_secondary_gradient' => '',
+                'hero_image' => '',
+                'hero_app_sliders' => '',
+                'slider_animation_delay' => '6',
+                            ), $atts));
+            $atts['content'] = $content;
+
+
+            $title_s = !empty($title_font_size) ? "font-size: " . esc_attr($title_font_size) . "; " : '';
+            $title_w = !empty($title_font_weight) ? "font-weight: " . esc_attr($title_font_weight) . "; " : '';
+            $title_t = !empty($title_text_transform) ? "text-transform: " . esc_attr($title_text_transform) . "; " : '';
+            $title_c = !empty($title_color) ? "color: " . esc_attr($title_color) . "; " : '';
+
+            $subtitle_s = !empty($subtitle_font_size) ? "font-size: " . esc_attr($subtitle_font_size) . "; " : '';
+            $subtitle_w = !empty($subtitle_font_weight) ? "font-weight: " . esc_attr($subtitle_font_weight) . "; " : '';
+            $subtitle_t = !empty($subtitle_text_transform) ? "text-transform: " . esc_attr($subtitle_text_transform) . "; " : '';
+            $subtitle_c = !empty($subtitle_color) ? "color: " . esc_attr($subtitle_color) . "; " : '';
+
+
+            $title_style = esc_attr($title_s) . esc_attr($title_w) . esc_attr($title_t) . esc_attr($title_c);
+            $subtitle_style = esc_attr($subtitle_s) . esc_attr($subtitle_w) . esc_attr($subtitle_t) . esc_attr($subtitle_c);
+
+//Hero Image retrieving
+            if (!empty($hero_image)) {
+                $image_ids = explode(',', $hero_image);
+                $single_img = wp_get_attachment_image_src($image_ids[0], "large");
+            }
+            $single_img_src = !empty($single_img[0]) ? $single_img[0] : '';
+            $allowed_html = array(
+                'a' => array(
+                    'href' => array(),
+                    'title' => array()
+                ),
+                'br' => array(),
+                'em' => array(),
+                'strong' => array(),
+            );
+            $btn_style = '';
+
+            $btradius = !empty($btn_radius) ? 'border-radius:' . ($btn_radius) . ';' : '';
+            $ptb = !empty($btn_ptb) ? 'padding-top:' . ($btn_ptb) . '; padding-bottom:' . ($btn_ptb) . ';' : '';
+            $plr = !empty($btn_plr) ? 'padding-left:' . ($btn_plr) . '; padding-right:' . ($btn_plr) . ';' : '';
+
+            $btcolor = !empty($btn_text_color) ? 'color:' . ($btn_text_color) . ';' : '';
+            $bgcolor = !empty($btn_bg_color) ? 'background:' . ($btn_bg_color) . ';' : 'background: transparent;';
+            $bdr = !empty($btn_bdr_color) ? 'border:' . $btn_bdr_width . ' solid ' . ($btn_bdr_color) . ';' : '';
+
+            $bdr2 = !empty($btn_bdr_color) ? $btn_bdr_color : 'transparent';
+            $bgcolor2 = !empty($btn_bg_color) ? $btn_bg_color : 'transparent';
+            $btcolor2 = !empty($btn_text_color) ? $btn_text_color : '';
+
+            $hbdr = !empty($btn_hover_bdr_color) ? $btn_hover_bdr_color : 'transparent';
+            $hbgcolor = !empty($btn_hover_bg_color) ? $btn_hover_bg_color : 'transparent';
+            $hbtcolor = !empty($btn_hover_text_color) ? $btn_hover_text_color : '';
+
+            $btn_style = $btradius . $ptb . $plr . $btcolor . $bgcolor . $bdr;
+
+            $btn_style2 = '';
+            $btradius2 = !empty($btn2_radius) ? 'border-radius:' . ($btn2_radius) . ';' : '';
+            $ptb2 = !empty($btn2_ptb) ? 'padding-top:' . ($btn2_ptb) . '; padding-bottom:' . ($btn2_ptb) . ';' : '';
+            $plr2 = !empty($btn2_plr) ? 'padding-left:' . ($btn2_plr) . '; padding-right:' . ($btn2_plr) . ';' : '';
+
+            $b2tcolor = !empty($btn2_text_color) ? 'color:' . ($btn2_text_color) . ';' : '';
+            $b2gcolor = !empty($btn2_bg_color) ? 'background:' . ($btn2_bg_color) . ';' : 'background: transparent;';
+            $b2dr = !empty($btn2_bdr_color) ? 'border:' . $btn2_bdr_width . ' solid ' . ($btn2_bdr_color) . ';' : '';
+
+            $b2dr2 = !empty($btn2_bdr_color) ? $btn2_bdr_color : 'transparent';
+            $b2gcolor2 = !empty($btn2_bg_color) ? $btn2_bg_color : 'transparent';
+            $b2tcolor2 = !empty($btn2_text_color) ? $btn2_text_color : '';
+
+            $hb2dr = !empty($btn2_hover_bdr_color) ? $btn2_hover_bdr_color : 'transparent';
+            $hb2gcolor = !empty($btn2_hover_bg_color) ? $btn2_hover_bg_color : 'transparent';
+            $hb2tcolor = !empty($btn2_hover_text_color) ? $btn2_hover_text_color : '';
+
+            $btn_style2 = $btradius2 . $ptb2 . $plr2 . $b2tcolor . $b2gcolor . $b2dr;
+            ob_start();
+            ?>
+            <!--Start slider-app -->
+            <div class="slide-banner slider3 slider-app">
+                <div class="container">
+                    <div class="row">
+                        <div class="slider3-content appslider">
+                            <div class="col-sm-7 slide3-text">
+                                <div class="slider-text">
+                                    <h2 style="<?php echo esc_attr($title_style); ?>"><?php
+                                        if (!empty($hero_title)) {
+                                            echo wp_kses($hero_title, $allowed_html);
+                                        }
+                                        ?></h2>
+                                    <p style="<?php echo esc_attr($subtitle_style); ?>"><?php
+                                        if (!empty($hero_subtitle)) {
+                                            echo wp_kses($hero_subtitle, $allowed_html);
+                                        }
+                                        ?></p>
+                                    <?php
+                                    if (!empty($show_hide_first_button) && $show_hide_first_button == 'show') {
+                                        if (!empty($first_hero_app_button)) {
+                                            $href = vc_build_link($first_hero_app_button);
+                                            $f_active = '';
+                                            if (!empty($is_first_active) && $is_first_active == 'active') {
+                                                $f_active = 'active';
+                                            }
+                                            if (empty($href['title'])) {
+                                                $href['title'] = 'Get App Now';
+                                            }
+                                            if (empty($href['url'])) {
+                                                $href['url'] = '#';
+                                            }
+                                            if (empty($href['target'])) {
+                                                $href['target'] = '_self';
+                                            }
+                                            ?>
+                                            <a 
+                                                onmouseleave="this.style.borderColor='<?php echo esc_attr($bdr2); ?>'; this.style.backgroundColor='<?php echo esc_attr($bgcolor2); ?>'; this.style.color='<?php echo esc_attr($btcolor2); ?>'"
+                                                onmouseenter="this.style.borderColor='<?php echo esc_attr($hbdr); ?>'; this.style.backgroundColor='<?php echo esc_attr($hbgcolor); ?>'; this.style.color='<?php echo esc_attr($hbtcolor); ?>';" 
+                                                style="<?php echo esc_attr($btn_style); ?>" 
+                                                target="<?php echo esc_attr($href['target']); ?>" href="<?php echo esc_url($href['url']); ?>"
+                                                class="btn sub_btn sub_btn-two <?php echo esc_attr($f_active); ?>"><?php echo esc_html($href['title']); ?></a>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                        <?php
+                                        if (!empty($show_hide_second_button) && $show_hide_second_button == 'show') {
+                                            if (!empty($second_hero_app_button)) {
+                                                $href = vc_build_link($second_hero_app_button);
+                                                $s_active = '';
+                                                if (!empty($is_second_active) && $is_second_active == 'active') {
+                                                    $s_active = 'active';
+                                                }
+                                                if (empty($href['title'])) {
+                                                    $href['title'] = 'Discover More';
+                                                }
+                                                if (empty($href['url'])) {
+                                                    $href['url'] = '#';
+                                                }
+                                                if (empty($href['target'])) {
+                                                    $href['target'] = '_self';
+                                                }
+                                                ?>
+                                            <a 
+                                                onmouseleave="this.style.borderColor='<?php echo esc_attr($b2dr2); ?>'; this.style.backgroundColor='<?php echo esc_attr($b2gcolor2); ?>'; this.style.color='<?php echo esc_attr($b2tcolor2); ?>'"
+                                                onmouseenter="this.style.borderColor='<?php echo esc_attr($hb2dr); ?>'; this.style.backgroundColor='<?php echo esc_attr($hb2gcolor); ?>'; this.style.color='<?php echo esc_attr($hb2tcolor); ?>';" 
+                                                style="<?php echo esc_attr($btn_style2); ?>" 
+                                                target="<?php echo esc_attr($href['target']); ?>" href="<?php echo esc_url($href['url']); ?>"
+                                                class="btn sub_btn sub_btn-two <?php echo esc_attr($s_active); ?>"><?php echo esc_html($href['title']); ?></a>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <?php if (!empty($single_img_src)): ?>
+                                    <div class="img">
+                                        <img src="<?php echo esc_url($single_img_src); ?>" alt="<?php echo esc_html__('Image', 'inova'); ?>" />
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="cb-slideshow">
+                    <?php
+                    if (!empty($hero_app_sliders)) {
+                        $sliders = vc_param_group_parse_atts($hero_app_sliders);
+                        if (is_array($sliders)) {
+                            $counter = 1;
+                            $second = 0;
+                            $delay = 6;
+                            if (!empty($slider_animation_delay)) {
+                                $delay = $slider_animation_delay;
+                            }
+                            foreach ($sliders as $slider):
+                                if (!empty($slider['slider_image'])) {
+                                    $slider_image_ids = explode(',', $slider['slider_image']);
+                                    $slider_image_img = wp_get_attachment_image_src($slider_image_ids[0], "full");
+                                }
+                                $slider_image_src = !empty($slider_image_img[0]) ? $slider_image_img[0] : '';
+                                ?>
+                                <li class="slideshowPic pic-<?php echo esc_attr($counter); ?>" style="background: url('<?php echo esc_url($slider_image_src); ?>'); animation-delay: <?php echo esc_attr($second); ?>s;"></li>
+                                    <?php
+                                    $counter++;
+                                    $second += $delay;
+                                endforeach;
+                            }
+                        }
+                        ?>
+                </ul>
+            </div>
+            <?php
+            return ob_get_clean(); // end output
+        }
+
+    }
+
+}
