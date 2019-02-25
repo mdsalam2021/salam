@@ -1,0 +1,481 @@
+<?php
+if (!defined("ABSPATH")) {
+    die("-1");
+}
+
+add_action("vc_before_init",
+    function () {
+        vc_map(
+            array(
+                "name" => esc_html__("Hero App Slideshow", "inova"),
+                "base" => "inova_hero_app_slider",
+                "icon" => esc_url(INOVA_THEME_ASSETS_IMG_URI)."/vc_icons/hero/Hero-App-Slider.png",
+                "category" => esc_html__("Inova Hero", "inova"),
+                "description" => esc_html__("Hero for App demo with texts, buttons, image with image slideshow background", "inova"),
+                "params" => array(
+                    array(
+                        "type" => "textfield",
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Hero Title", "inova"),
+                        "param_name" => "hero_title",
+                        "description" => esc_html__("Enter hero section title text here.", "inova")
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Title","inova"),
+                        "heading" => esc_html__("Title Font Size", "inova"),
+                        "param_name" => "title_font_size",
+                        
+                        "description" => esc_html__("Enter hero title font size in pixel.", "inova")
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__("Title","inova"),
+                        "heading" => esc_html__("Title Font Weight", "inova"),
+                        "param_name" => "title_font_weight",
+                        "value" => font_weight_values(),
+                        "description" => esc_html__("Select your hero title font weight. Default: Bold", "inova"),
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__("Title","inova"),
+                        "heading" => esc_html__("Title Text Transform", "inova"),
+                        "param_name" => "title_text_transform",
+                        "value" => text_transform_values(),
+                        "description" => esc_html__("Select your hero title text transform.", "inova"),
+
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Title","inova"),
+                        "heading" => esc_html__("Title Color", "inova"),
+                        "param_name" => "title_color",
+                        "description" => esc_html__("Pick color for your hero section title. Default color: #ffffff", "inova")
+                    ),
+                    array(
+                        "type" => "textarea",
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Hero Sub-title", "inova"),
+                        "param_name" => "hero_subtitle",
+                        "description" => esc_html__("Enter hero section sub title text here.", "inova")
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Subtitle","inova"),
+                        "heading" => esc_html__("Subtitle Font Size", "inova"),
+                        "param_name" => "subtitle_font_size",
+                        
+                        "description" => esc_html__("Enter hero section subtitle font size in pixel.", "inova")
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__("Subtitle","inova"),
+                        "heading" => esc_html__("Subtitle Font Weight", "inova"),
+                        "param_name" => "subtitle_font_weight",
+                        "value" => font_weight_values(),
+                        "description" => esc_html__("Select your hero section subtitle font weight. Default: Light", "inova"),
+
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "group" => esc_html__("Subtitle","inova"),
+                        "heading" => esc_html__("Sub-title Text Transform", "inova"),
+                        "param_name" => "subtitle_text_transform",
+                        "value" => text_transform_values(),
+                        "description" => esc_html__("Select your hero subtitle text transform.", "inova"),
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Subtitle","inova"),
+                        "heading" => esc_html__("Subtitle Color", "inova"),
+                        "param_name" => "subtitle_color",
+                        "description" => esc_html__("Pick color for your hero section subtitle. Default color: #ffffff", "inova")
+                    ),
+                    //First Button
+                    array(
+                        "type"        => "checkbox",
+                        "admin_label" => TRUE,
+                        "heading"     => esc_html__("Show/Hide First Button","inova"),
+                        "param_name"  => "show_hide_first_button",
+                        "value"       => array(
+                            "Show"=>"show",
+                        ),
+                        
+                        "description" => esc_html__("If you wish to show the first button, then check the show box.","inova")
+                    ),
+                    
+                    array(
+                        "type" => "vc_link",
+                        "dependency"    => array(
+                            "element"   => "show_hide_first_button",
+                            "value"   => "show",
+                        ),
+                        "heading" => esc_html__("First App Button", "inova"),
+                        "param_name" => "first_hero_app_button",
+                        "description" => esc_html__("Enter your hero app button title, url and target.", "inova"),
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button", "inova"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Border Radius", "inova"),
+                        "param_name" => "btn_radius",
+                        "value" => "3px",
+                        "dependency" => array(
+                            "element" => "show_hide_first_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button border radius.", "inova"),
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button", "inova"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Padding (Top-Bottom)", "inova"),
+                        "param_name" => "btn_ptb",
+                        "value" => "15px",
+                        "dependency" => array(
+                            "element" => "show_hide_first_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button padding top bottom.", "inova"),
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button", "inova"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Padding (Left-Right)", "inova"),
+                        "param_name" => "btn_plr",
+                        "value" => "60px",
+                        "dependency" => array(
+                            "element" => "show_hide_first_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button padding left right.", "inova"),
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "inova"),
+                        "heading" => esc_html__("Text Color", "inova"),
+                        "param_name" => "btn_text_color",
+                        "dependency" => array(
+                            "element" => "show_hide_first_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#3927ef',
+                        "description" => esc_html__("Pick color for button text.", "inova")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "inova"),
+                        "heading" => esc_html__("Background Color", "inova"),
+                        "param_name" => "btn_bg_color",
+                        "dependency" => array(
+                            "element" => "show_hide_first_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#fff',
+                        "description" => esc_html__("Pick color for button background.", "inova")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "inova"),
+                        "heading" => esc_html__("Border Color", "inova"),
+                        "param_name" => "btn_bdr_color",
+                        "dependency" => array(
+                            "element" => "show_hide_first_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#fff',
+                        "description" => esc_html__("Pick color for button border.", "inova")
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button", "inova"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Border Width", "inova"),
+                        "param_name" => "btn_bdr_width",
+                        "value" => "1px",
+                        "dependency" => array(
+                            "element" => "show_hide_first_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button border widht.", "inova"),
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "inova"),
+                        "heading" => esc_html__("Text Color(Hover)", "inova"),
+                        "param_name" => "btn_hover_text_color",
+                        "dependency" => array(
+                            "element" => "show_hide_first_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#fff',
+                        "description" => esc_html__("Pick color for button text.", "inova")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "inova"),
+                        "heading" => esc_html__("Background Color(Hover)", "inova"),
+                        "param_name" => "btn_hover_bg_color",
+                        "dependency" => array(
+                            "element" => "show_hide_first_button",
+                            "value" => "show",
+                        ),
+                        'value' => '',
+                        "description" => esc_html__("Pick color for button background.", "inova")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button", "inova"),
+                        "heading" => esc_html__("Border Color(Hover)", "inova"),
+                        "param_name" => "btn_hover_bdr_color",
+                        "dependency" => array(
+                            "element" => "show_hide_first_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#fff',
+                        "description" => esc_html__("Pick color for button border.", "inova")
+                    ),
+                    //Second Button
+                    array(
+                        "type"        => "checkbox",
+                        "admin_label" => TRUE,
+                        "heading"     => esc_html__("Show/Hide Second Button","inova"),
+                        "param_name"  => "show_hide_second_button",
+                        "value"       => array(
+                            "Show"=>"show",
+                        ),
+                        "std"         => " ",
+                        "description" => esc_html__("If you wish to show the second button, then check the show box.","inova")
+                    ),
+                    
+                    array(
+                        "type" => "vc_link",
+                        "dependency"    => array(
+                            "element"   => "show_hide_second_button",
+                            "value"   => "show",
+                        ),
+                        "heading" => esc_html__("Second App Button", "inova"),
+                        "param_name" => "second_hero_app_button",
+                        "description" => esc_html__("Enter your hero app button title, url and target.", "inova"),
+                    ),
+                    
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button2", "inova"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Border Radius", "inova"),
+                        "param_name" => "btn2_radius",
+                        "value" => "3px",
+                        "dependency" => array(
+                            "element" => "show_hide_second_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button border radius.", "inova"),
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button2", "inova"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Padding (Top-Bottom)", "inova"),
+                        "param_name" => "btn2_ptb",
+                        "value" => "15px",
+                        "dependency" => array(
+                            "element" => "show_hide_second_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button padding top bottom.", "inova"),
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button2", "inova"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Padding (Left-Right)", "inova"),
+                        "param_name" => "btn2_plr",
+                        "value" => "60px",
+                        "dependency" => array(
+                            "element" => "show_hide_second_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button padding left right.", "inova"),
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button2", "inova"),
+                        "heading" => esc_html__("Text Color", "inova"),
+                        "param_name" => "btn2_text_color",
+                       "dependency" => array(
+                            "element" => "show_hide_second_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#fff',
+                        "description" => esc_html__("Pick color for button text.", "inova")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button2", "inova"),
+                        "heading" => esc_html__("Background Color", "inova"),
+                        "param_name" => "btn2_bg_color",
+                        "dependency" => array(
+                            "element" => "show_hide_second_button",
+                            "value" => "show",
+                        ),
+                        'value' => '',
+                        "description" => esc_html__("Pick color for button background.", "inova")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button2", "inova"),
+                        "heading" => esc_html__("Border Color", "inova"),
+                        "param_name" => "btn2_bdr_color",
+                        "dependency" => array(
+                            "element" => "show_hide_second_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#fff',
+                        "description" => esc_html__("Pick color for button border.", "inova")
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "group" => esc_html__("Button2", "inova"),
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Border Width", "inova"),
+                        "param_name" => "btn2_bdr_width",
+                        "value" => "1px",
+                       "dependency" => array(
+                            "element" => "show_hide_second_button",
+                            "value" => "show",
+                        ),
+                        "description" => esc_html__("Enter button border widht.", "inova"),
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button2", "inova"),
+                        "heading" => esc_html__("Text Color(Hover)", "inova"),
+                        "param_name" => "btn2_hover_text_color",
+                        "dependency" => array(
+                            "element" => "show_hide_second_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#3927ef',
+                        "description" => esc_html__("Pick color for button text.", "inova")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button2", "inova"),
+                        "heading" => esc_html__("Background Color(Hover)", "inova"),
+                        "param_name" => "btn2_hover_bg_color",
+                        "dependency" => array(
+                            "element" => "show_hide_second_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#fff',
+                        "description" => esc_html__("Pick color for button background.", "inova")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "group" => esc_html__("Button2", "inova"),
+                        "heading" => esc_html__("Border Color(Hover)", "inova"),
+                        "param_name" => "btn2_hover_bdr_color",
+                        "dependency" => array(
+                            "element" => "show_hide_second_button",
+                            "value" => "show",
+                        ),
+                        'value' => '#fff',
+                        "description" => esc_html__("Pick color for button border.", "inova")
+                    ),
+                    //End
+                    array(
+                        "type" => "attach_image",
+                        "heading" => esc_html__("Hero Image", "inova"),
+                        "param_name" => "hero_image",
+                        "description" => esc_html__("Upload your hero section image.", "inova")
+                    ),
+                    array(
+                        "type" => "param_group",
+                        "param_name" => "hero_app_sliders",
+                        "heading" => esc_html__("Hero Slider Items", "inova"),
+                        "description" => esc_html__("This slider needs atleast 4 slider images. You can add more than 4 images but not less than 4.", "inova"),
+                        "params" => array(
+                            array(
+                                "type" => "attach_image",
+                                "heading" => esc_html__("Slider Image", "inova"),
+                                "param_name" => "slider_image",
+                                "description" => esc_html__("Upload images for slider.", "inova")
+                            ),
+                        ),
+                    ),
+                    array(
+                        "type" => "textfield",
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Slider Animation Delay", "inova"),
+                        "param_name" => "slider_animation_delay",
+                        "value" => "6",
+                        "description" => esc_html__("Enter slider animation delay in second. Default animation delay 6 seconds.", "inova")
+                    ),
+                    array(
+                        "type"        => "checkbox",
+                        "admin_label" => TRUE,
+                        "heading"     => esc_html__("Overlay?","inova"),
+                        "param_name"  => "is_overlay",
+                        "value"       => array(
+                            "Overlay"=>"overlay",
+                        ),
+                        "std"         => "overlay",
+                        "description" => esc_html__("If you wish to use no overlay color, then un-check the overlay box.","inova")
+                    ),
+                    array(
+                        "type" => "dropdown",
+                        "admin_label" => TRUE,
+                        "heading" => esc_html__("Overlay Color", "inova"),
+                        "param_name" => "overlay_color",
+                        "value" => array(
+                            "Gradient" => "gradient",
+                            "Solid" => "solid",
+                        ),
+                        "dependency"    => array(
+                            "element"   => "is_overlay",
+                            "value"   => "overlay",
+                        ),
+                        "description" => esc_html__("Select overlay color type.", "inova"),
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "heading" => esc_html__("Overlay Solid Color", "inova"),
+                        "param_name" => "hero_overlay_solid",
+                        "dependency"    => array(
+                            "element"   => "overlay_color",
+                            "value"   => "solid",
+                        ),
+                        "value"         => "",
+                        "description" => esc_html__("Pick solid color for hero overlay.", "inova")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "heading" => esc_html__("Overlay Primary Color", "inova"),
+                        "param_name" => "hero_overlay_primary_gradient",
+                        "dependency"    => array(
+                            "element"   => "overlay_color",
+                            "value"   => "gradient",
+                        ),
+                        "value"         => "",
+                        "description" => esc_html__("Pick primary color for hero gradient overlay.", "inova")
+                    ),
+                    array(
+                        "type" => "colorpicker",
+                        "heading" => esc_html__("Overlay Secondary Color", "inova"),
+                        "param_name" => "hero_overlay_secondary_gradient",
+                        "dependency"    => array(
+                            "element"   => "overlay_color",
+                            "value"   => "gradient",
+                        ),
+                        "value"         => "",
+                        "description" => esc_html__("Pick secondary color for hero gradient overlay.", "inova")
+                    ),
+                )
+            )
+        );
+    }
+);
